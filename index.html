@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alquileres en Mapa</title>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXPX52c062dXYvJBITx6gjd2qDcbvi_G0&callback=iniciarMapa" async defer></script>
+</head>
+<body>
+
+    <h1>Alquileres Disponibles</h1>
+
+    <div id="filtros">
+        <label>Máximo Precio: <input type="number" id="filtro-precio" placeholder="Ej: 60000"></label>
+        <label>Habitaciones: <input type="number" id="filtro-habitaciones" placeholder="Ej: 2"></label>
+        <button onclick="filtrarAlquileres()">Filtrar</button>
+    </div>
+
+    <div id="map"></div>
+
+    <h2>Agregar un Alquiler</h2>
+    <form id="formulario">
+        <input type="text" id="direccion" placeholder="Dirección" required>
+        <input type="number" id="latitud" placeholder="Latitud" required>
+        <input type="number" id="longitud" placeholder="Longitud" required>
+        <input type="number" id="precio" placeholder="Precio" required>
+        <input type="number" id="habitaciones" placeholder="Habitaciones" required>
+        <input type="text" id="fotos" placeholder="URL de Foto" required>
+        <button type="submit">Agregar</button>
+    </form>
+
+</body>
+</html>
