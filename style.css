@@ -1,0 +1,26 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#map {
+    width: 100%;
+    height: 500px;
+    margin: 20px 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: auto;
+}
+
+form input {
+    margin: 5px 0;
+    padding: 10px;
+}
+
+#filtros {
+    margin: 20px;
+}
