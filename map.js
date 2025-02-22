@@ -10,26 +10,27 @@ function initMap() {
 }
 
 function loadRentals() {
-    fetch('https://sheets.googleapis.com/v4/spreadsheets/YOUR_SHEET_ID/values/A1:D100?key=YOUR_API_KEY')
+    fetch('https://sheets.googleapis.com/v4/spreadsheets/YOUR_SHEET_ID/values/A1:G100?key=YOUR_API_KEY')
         .then(response => response.json())
         .then(data => {
-            const rentals = data.values;
+            const rentals = data.values; // Asegúrate de que los datos estén correctamente organizados
             rentals.forEach(rental => {
-                const [address, price, rooms, allowPets, lat, lng, photoUrl] = rental;
+                const [telefono, direccion, precio, ambientes, habitaciones, mascotas, foto, lat, lng] = rental;
                 const marker = new google.maps.Marker({
                     position: { lat: parseFloat(lat), lng: parseFloat(lng) },
                     map: map,
-                    title: address,
+                    title: direccion,
                 });
 
                 const infoWindow = new google.maps.InfoWindow({
                     content: `
                         <div>
-                            <h3>${address}</h3>
-                            <p>Precio: ${price}</p>
-                            <p>Habitaciones: ${rooms}</p>
-                            <p>¿Permiten mascotas? ${allowPets}</p>
-                            <img src="${photoUrl}" alt="Foto del alquiler" style="width: 100px; height: 100px;">
+                            <h3>${direccion}</h3>
+                            <p>Precio: ${precio}</p>
+                            <p>Ambientes: ${ambientes}</p>
+                            <p>Habitaciones: ${habitaciones}</p>
+                            <p>¿Permiten mascotas? ${mascotas}</p>
+                            <img src="${foto}" alt="Foto del alquiler" style="width: 100px; height: 100px;">
                         </div>
                     `,
                 });
@@ -41,24 +42,3 @@ function loadRentals() {
             });
         });
 }
-
-document.getElementById("filterBtn").addEventListener("click", function() {
-    const rooms = document.getElementById("rooms").value;
-    const priceMin = document.getElementById("priceMin").value;
-    const priceMax = document.getElementById("priceMax").value;
-    const pets = document.getElementById("pets").value;
-
-    markers.forEach(marker => {
-        const rental = marker.rentalData;
-        if (
-            (rooms && rental.rooms !== rooms) ||
-            (priceMin && rental.price < priceMin) ||
-            (priceMax && rental.price > priceMax) ||
-            (pets && rental.allowPets !== pets)
-        ) {
-            marker.setMap(null);
-        } else {
-            marker.setMap(map);
-        }
-    });
-});
