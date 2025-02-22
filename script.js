@@ -45,8 +45,11 @@ function cargarAlquileres() {
 }
 
 function mostrarSeccion(seccion) {
+    // Oculta todas las secciones
     document.getElementById("clientes").style.display = "none";
     document.getElementById("dueños").style.display = "none";
+
+    // Muestra la sección seleccionada
     if (seccion === "clientes") {
         document.getElementById("clientes").style.display = "block";
     } else if (seccion === "dueños") {
