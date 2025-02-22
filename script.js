@@ -2,10 +2,11 @@ const API_URL = "https://script.google.com/macros/s/AKfycbz-f1Wzh7g21CvvVfrYYRGs
 
 let mapa;
 let marcadores = [];
+let usuarioLogueado = false;
 
 function iniciarMapa() {
     mapa = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: -34.6037, lng: -58.3816 }, // Buenos Aires
+        center: { lat: -27.4667, lng: -58.0833 }, // Santo Tomé, Corrientes
         zoom: 12
     });
     cargarAlquileres();
@@ -43,8 +44,23 @@ function cargarAlquileres() {
         .catch(error => console.error("Error cargando alquileres:", error));
 }
 
+function mostrarSeccion(seccion) {
+    document.getElementById("clientes").style.display = "none";
+    document.getElementById("dueños").style.display = "none";
+    if (seccion === "clientes") {
+        document.getElementById("clientes").style.display = "block";
+    } else if (seccion === "dueños") {
+        document.getElementById("dueños").style.display = "block";
+    }
+}
+
 document.getElementById("formulario").addEventListener("submit", function (e) {
     e.preventDefault();
+
+    if (!usuarioLogueado) {
+        alert("Por favor, inicia sesión antes de agregar un alquiler.");
+        return;
+    }
 
     let datos = {
         direccion: document.getElementById("direccion").value,
@@ -70,16 +86,27 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
     .catch(error => console.error("Error al agregar:", error));
 });
 
+document.getElementById("login-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // Simulación de login
+    usuarioLogueado = true; // Aquí debería ir la validación real
+    alert("¡Bienvenido, dueño! Ahora puedes agregar alquileres.");
+    mostrarSeccion('dueños');
+});
+
 function filtrarAlquileres() {
     let precioMax = document.getElementById("filtro-precio").value;
     let habitaciones = document.getElementById("filtro-habitaciones").value;
+    let mascotas = document.getElementById("filtro-mascotas").value;
 
     fetch(API_URL)
         .then(response => response.json())
         .then(data => {
             let filtrados = data.filter(alquiler => {
                 return (!precioMax || alquiler.precio <= precioMax) &&
-                       (!habitaciones || alquiler.habitaciones == habitaciones);
+                       (!habitaciones || alquiler.habitaciones == habitaciones) &&
+                       (!mascotas || alquiler.mascotas === mascotas);
             });
 
             marcadores.forEach(marker => marker.setMap(null)); // Borra marcadores
