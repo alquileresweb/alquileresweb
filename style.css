@@ -1,39 +1,27 @@
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
     text-align: center;
 }
 
-#map {
-    width: 100%;
-    height: 500px;
-    margin: 20px 0;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    margin: auto;
-}
-
-form input, form select {
-    margin: 5px 0;
-    padding: 10px;
-}
-
-#filtros {
-    margin: 20px;
-}
-
-#botones {
-    margin: 20px;
-}
-
 button {
+    display: block;
+    margin: 20px auto;
     padding: 10px 20px;
-    margin: 10px;
+    font-size: 16px;
 }
 
-#dueños, #clientes {
-    display: none;
+input, select {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+}
+
+#map {
+    margin-top: 20px;
 }
