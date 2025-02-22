@@ -16,11 +16,24 @@ form {
     margin: auto;
 }
 
-form input {
+form input, form select {
     margin: 5px 0;
     padding: 10px;
 }
 
 #filtros {
     margin: 20px;
+}
+
+#botones {
+    margin: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+}
+
+#dueños, #clientes {
+    display: none;
 }
