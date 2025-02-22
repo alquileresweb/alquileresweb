@@ -6,30 +6,71 @@
     <title>Alquileres en Mapa</title>
     <script defer src="script.js"></script>
     <link rel="stylesheet" href="style.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXPX52c062dXYvJBITx6gjd2qDcbvi_G0&callback=iniciarMapa" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&callback=iniciarMapa" async defer></script>
 </head>
 <body>
 
-    <h1>Alquileres Disponibles</h1>
+    <h1>Bienvenidos a Alquileres</h1>
 
-    <div id="filtros">
-        <label>Máximo Precio: <input type="number" id="filtro-precio" placeholder="Ej: 60000"></label>
-        <label>Habitaciones: <input type="number" id="filtro-habitaciones" placeholder="Ej: 2"></label>
-        <button onclick="filtrarAlquileres()">Filtrar</button>
+    <!-- Botones para elegir la sección -->
+    <div id="botones">
+        <button onclick="mostrarSeccion('clientes')">Ver Alquileres</button>
+        <button onclick="mostrarSeccion('dueños')">Agregar Alquiler</button>
     </div>
 
-    <div id="map"></div>
+    <!-- Sección de Filtros y Mapa (para Estudiantes) -->
+    <div id="clientes" style="display: none;">
+        <h2>Filtrar Alquileres</h2>
+        <div id="filtros">
+            <label>Precio:
+                <select id="filtro-precio">
+                    <option value="">Seleccione</option>
+                    <option value="max">Máximo Precio</option>
+                    <option value="min">Menor Precio</option>
+                </select>
+            </label>
+            <label>Habitaciones:
+                <select id="filtro-habitaciones">
+                    <option value="">Seleccione</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4+</option>
+                </select>
+            </label>
+            <label>Mascotas Permitidas:
+                <select id="filtro-mascotas">
+                    <option value="">Seleccione</option>
+                    <option value="Sí">Sí</option>
+                    <option value="No">No</option>
+                </select>
+            </label>
+            <button onclick="filtrarAlquileres()">Filtrar</button>
+        </div>
 
-    <h2>Agregar un Alquiler</h2>
-    <form id="formulario">
-        <input type="text" id="direccion" placeholder="Dirección" required>
-        <input type="number" id="latitud" placeholder="Latitud" required>
-        <input type="number" id="longitud" placeholder="Longitud" required>
-        <input type="number" id="precio" placeholder="Precio" required>
-        <input type="number" id="habitaciones" placeholder="Habitaciones" required>
-        <input type="text" id="fotos" placeholder="URL de Foto" required>
-        <button type="submit">Agregar</button>
-    </form>
+        <div id="map"></div>
+    </div>
+
+    <!-- Sección para Dueños con inicio de sesión -->
+    <div id="dueños" style="display: none;">
+        <h2>Iniciar Sesión (Dueño)</h2>
+        <form id="login-form">
+            <input type="text" id="usuario" placeholder="Usuario" required>
+            <input type="password" id="contraseña" placeholder="Contraseña" required>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+
+        <h2>Agregar un Alquiler</h2>
+        <form id="formulario">
+            <input type="text" id="direccion" placeholder="Dirección" required>
+            <input type="number" id="latitud" placeholder="Latitud" required>
+            <input type="number" id="longitud" placeholder="Longitud" required>
+            <input type="number" id="precio" placeholder="Precio" required>
+            <input type="number" id="habitaciones" placeholder="Habitaciones" required>
+            <input type="text" id="fotos" placeholder="URL de Foto" required>
+            <button type="submit">Agregar</button>
+        </form>
+    </div>
 
 </body>
 </html>
