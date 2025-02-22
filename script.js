@@ -45,6 +45,8 @@ function cargarAlquileres() {
 }
 
 function mostrarSeccion(seccion) {
+    console.log(`Mostrando sección: ${seccion}`);  // Agregado para verificar si la función se ejecuta
+
     // Oculta todas las secciones
     document.getElementById("clientes").style.display = "none";
     document.getElementById("dueños").style.display = "none";
