@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alquileres</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="config.js"></script>
 </head>
 <body>
     <h1>Plataforma de Alquileres</h1>
@@ -15,6 +15,7 @@
         <form id="registroForm">
             <input type="text" id="nombre" placeholder="Nombre" required>
             <input type="email" id="email" placeholder="Email" required>
+            <input type="tel" id="telefono" placeholder="Teléfono" required>
             <input type="password" id="password" placeholder="Contraseña" required>
             <button type="submit">Registrarse</button>
         </form>
@@ -41,11 +42,19 @@
         </form>
 
         <h2>Mapa de Alquileres</h2>
+        <input type="number" id="filtroAmbientes" placeholder="Filtrar por Ambientes">
+        <input type="number" id="filtroPrecio" placeholder="Precio Máximo">
+        <select id="filtroMascotas">
+            <option value="">Mascotas (Todos)</option>
+            <option value="Sí">Sí</option>
+            <option value="No">No</option>
+        </select>
+        <button onclick="filtrarAlquileres()">Filtrar</button>
         <div id="map" style="height: 400px;"></div>
     </div>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="config.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXPX52c062dXYvJBITx6gjd2qDcbvi_G0&callback=inicializarMapa" async defer></script>
     <script src="script.js"></script>
+    <script src="google-maps.js"></script>
 </body>
 </html>
