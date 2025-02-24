@@ -4,23 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alquileres</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 </head>
 <body>
-    <h2>Registro</h2>
-    <form id="registroForm">
-        <input type="text" id="nombre" placeholder="Nombre" required>
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="password" placeholder="Contraseña" required>
-        <button type="submit">Registrarse</button>
-    </form>
+    <h1>Plataforma de Alquileres</h1>
 
-    <h2>Inicio de Sesión</h2>
-    <form id="loginForm">
-        <input type="email" id="loginEmail" placeholder="Email" required>
-        <input type="password" id="loginPassword" placeholder="Contraseña" required>
-        <button type="submit">Iniciar Sesión</button>
-    </form>
+    <div id="auth">
+        <h2>Registro</h2>
+        <form id="registroForm">
+            <input type="text" id="nombre" placeholder="Nombre" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="submit">Registrarse</button>
+        </form>
 
+        <h2>Inicio de Sesión</h2>
+        <form id="loginForm">
+            <input type="email" id="loginEmail" placeholder="Email" required>
+            <input type="password" id="loginPassword" placeholder="Contraseña" required>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+    </div>
+
+    <div id="dashboard" style="display: none;">
+        <h2>Agregar Alquiler</h2>
+        <form id="alquilerForm">
+            <input type="text" id="direccion" placeholder="Dirección" required>
+            <input type="number" id="ambientes" placeholder="Ambientes" required>
+            <input type="number" id="precio" placeholder="Precio" required>
+            <select id="mascotas">
+                <option value="Sí">Permite Mascotas</option>
+                <option value="No">No Permite Mascotas</option>
+            </select>
+            <button type="submit">Agregar</button>
+        </form>
+
+        <h2>Mapa de Alquileres</h2>
+        <div id="map" style="height: 400px;"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
