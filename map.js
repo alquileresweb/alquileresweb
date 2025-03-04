@@ -12,9 +12,10 @@ function inicializarMapa() {
         return;
     }
 
+    // Centra el mapa en Santo Tomé, Corrientes
     const map = new google.maps.Map(mapElement, {
-        center: { lat: -34.6037, lng: -58.3816 }, // Configura las coordenadas del mapa
-        zoom: 12,
+        center: { lat: -29.0296, lng: -57.3801 }, // Coordenadas de Santo Tomé, Corrientes
+        zoom: 12,  // Nivel de zoom
     });
 
     // Llama a la función para cargar los alquileres
