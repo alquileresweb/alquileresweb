@@ -1,6 +1,10 @@
 // Asegúrate de que la clave API esté configurada correctamente en el HTML
 // Este código espera que el DOM esté listo
 document.addEventListener('DOMContentLoaded', function () {
+    if (typeof google === 'undefined') {
+        console.error("La API de Google Maps no se ha cargado correctamente.");
+        return;
+    }
     inicializarMapa();
 });
 
