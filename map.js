@@ -1,29 +1,40 @@
-// map.js
+// Este código espera que el DOM esté listo
+document.addEventListener('DOMContentLoaded', function () {
+    inicializarMapa();
+});
 
-// Función que inicializa el mapa de Google Maps
+// Esta es la función que se usa para inicializar el mapa
 function inicializarMapa() {
-    const mapOptions = {
-        center: { lat: -34.6037, lng: -58.3816 }, // Buenos Aires, Argentina
-        zoom: 12
-    };
-    const map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    // Asegúrate de que la clave API esté correctamente configurada y que el contenedor del mapa exista
+    const mapElement = document.getElementById('map');
+    if (!mapElement) {
+        console.error('Contenedor del mapa no encontrado.');
+        return;
+    }
+
+    const map = new google.maps.Map(mapElement, {
+        center: { lat: -34.6037, lng: -58.3816 }, // Configura las coordenadas del mapa
+        zoom: 12,
+    });
 
     // Llama a la función para cargar los alquileres
     cargarAlquileres(map);
 }
 
-// Función que carga los alquileres desde Google Sheets
+// Función para cargar los alquileres desde Google Apps Script
 function cargarAlquileres(map) {
-    fetch(GOOGLE_SCRIPT_URL + "?action=obtener_alquileres")
+    fetch('https://script.google.com/macros/s/AKfycbxmoiEnvG-x-Ium5QBAuADIPYI_rIy5Y-azdHDQnpmczlEWSTkHNxRge2VvXxR0MR2x/exec?action=obtener_alquileres')
         .then(response => response.json())
         .then(alquileres => {
             alquileres.forEach(alquiler => {
-                new google.maps.Marker({
+                const marker = new google.maps.Marker({
                     position: { lat: alquiler.latitud, lng: alquiler.longitud },
                     map: map,
-                    title: alquiler.direccion
+                    title: alquiler.direccion,
                 });
             });
         })
-        .catch(error => console.error('Error al obtener los alquileres:', error));
+        .catch(error => {
+            console.error('Error al obtener los alquileres:', error);
+        });
 }
