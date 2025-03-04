@@ -1,61 +1,63 @@
-// Esta función se ejecuta cuando se llama al script de Google Apps (via Fetch API)
+// Esta función maneja las solicitudes GET que se hacen a Google Apps Script
 function doGet(e) {
-    const action = e.parameter.action;
+  // Define los encabezados CORS para permitir solicitudes desde tu dominio
+  var headers = {
+    "Access-Control-Allow-Origin": "https://alquileresweb.github.io",  // Cambia este valor a tu dominio si es necesario
+    "Access-Control-Allow-Methods": "GET, POST",  // Métodos permitidos
+    "Access-Control-Allow-Headers": "Content-Type"  // Encabezados permitidos
+  };
 
-    if (action === "registrar") {
-        return registrarUsuario(e);
-    } else if (action === "login") {
-        return loginUsuario(e);
-    } else if (action === "obtener_alquileres") {
-        return obtenerAlquileres();
-    }
+  // Aquí procesas la acción solicitada (en este caso, obtener alquileres)
+  var action = e.parameter.action;
+
+  if (action == "obtener_alquileres") {
+    // Llama a la función que devuelve los alquileres desde tu hoja de Google Sheets
+    var alquileres = obtenerAlquileres();
+
+    // Devuelve la lista de alquileres como una respuesta JSON
+    return ContentService.createTextOutput(JSON.stringify(alquileres))
+                         .setMimeType(ContentService.MimeType.JSON)
+                         .setHeaders(headers);
+  }
+
+  // Si no se pasa una acción, devuelve un mensaje de error
+  var response = {
+    "message": "Acción no válida"
+  };
+
+  return ContentService.createTextOutput(JSON.stringify(response))
+                       .setMimeType(ContentService.MimeType.JSON)
+                       .setHeaders(headers);
 }
 
-// Registrar un nuevo usuario en la hoja de Google Sheets
-function registrarUsuario(e) {
-    const nombre = e.parameter.nombre;
-    const email = e.parameter.email;
-    const telefono = e.parameter.telefono;
-    const password = e.parameter.password;
-
-    const sheet = SpreadsheetApp.openById("1UaLlghoKp5eF8bonlWGV6EqWg-3K7iee2wG2raneoOI").getSheetByName("Usuarios");
-    sheet.appendRow([nombre, email, telefono, password]);
-
-    return ContentService.createTextOutput("Usuario registrado con éxito");
-}
-
-// Iniciar sesión del usuario
-function loginUsuario(e) {
-    const email = e.parameter.email;
-    const password = e.parameter.password;
-
-    const sheet = SpreadsheetApp.openById("1UaLlghoKp5eF8bonlWGV6EqWg-3K7iee2wG2raneoOI").getSheetByName("Usuarios");
-    const users = sheet.getDataRange().getValues();
-
-    for (let i = 1; i < users.length; i++) {
-        if (users[i][1] === email && users[i][3] === password) {
-            return ContentService.createTextOutput("login exitoso");
-        }
-    }
-
-    return ContentService.createTextOutput("Credenciales incorrectas");
-}
-
-// Obtener los alquileres desde la hoja de Google Sheets
+// Función que obtiene los alquileres desde una hoja de cálculo de Google Sheets
 function obtenerAlquileres() {
-    const sheet = SpreadsheetApp.openById("1UaLlghoKp5eF8bonlWGV6EqWg-3K7iee2wG2raneoOI").getSheetByName("Alquileres");
-    const alquileres = sheet.getDataRange().getValues();
-    
-    const alquileresJSON = alquileres.map(row => {
-        return {
-            lat: row[0],           // Latitud
-            lng: row[1],           // Longitud
-            direccion: row[2],     // Dirección
-            ambientes: row[3],     // Cantidad de ambientes
-            precio: row[4],        // Precio
-            permiteMascotas: row[5]  // Si permite mascotas
-        };
-    });
+  // Abre la hoja de cálculo de Google Sheets (cambia este ID con el ID de tu hoja)
+  var spreadsheet = SpreadsheetApp.openById("1UaLlghoKp5eF8bonlWGV6EqWg-3K7iee2wG2raneoOI");
+  
+  // Accede a la hoja de trabajo en donde se almacenan los alquileres (cambia 'Alquileres' si es necesario)
+  var sheet = spreadsheet.getSheetByName("Alquileres");
 
-    return ContentService.createTextOutput(JSON.stringify(alquileresJSON)).setMimeType(ContentService.MimeType.JSON);
+  // Obtiene todos los datos de la hoja (comienza desde la segunda fila para ignorar los encabezados)
+  var data = sheet.getDataRange().getValues();
+  
+  // Array donde almacenaremos los alquileres
+  var alquileres = [];
+  
+  // Procesamos cada fila y la transformamos en un objeto
+  for (var i = 1; i < data.length; i++) {
+    var alquiler = {
+      direccion: data[i][0],
+      ambientes: data[i][1],
+      precio: data[i][2],
+      mascotas: data[i][3] === "Sí",  // Convierte "Sí" o "No" a un valor booleano
+      latitud: parseFloat(data[i][4]),  // Asegúrate de que la latitud esté en formato numérico
+      longitud: parseFloat(data[i][5])  // Asegúrate de que la longitud esté en formato numérico
+    };
+    alquileres.push(alquiler);
+  }
+  
+  // Devuelve el array de alquileres
+  return alquileres;
 }
+
