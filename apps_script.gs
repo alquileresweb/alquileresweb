@@ -22,7 +22,7 @@ function obtenerAlquileres() {
   // Ejemplo de alquileres con latitudes y longitudes de test
   var alquileres = [
     { latitud: -29.0296, longitud: -57.3801, direccion: "Santo Tomé, Corrientes" },
-    // Puedes agregar más alquileres aquí si tienes datos reales
+    // Agrega más alquileres aquí si tienes datos reales
   ];
 
   // Devuelve los alquileres en formato JSON
