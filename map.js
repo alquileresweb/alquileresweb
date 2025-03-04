@@ -34,15 +34,12 @@ function inicializarMapa() {
     zoom: 12, // Nivel de zoom adecuado
     center: mapaSantoTome // Coordenadas de Santo Tomé
   });
-
-  // Cargar los alquileres en el mapa
-  cargarAlquileres();
 }
 
 // Cargar la API de Google Maps y llamar a la función inicializarMapa
 function cargarAPI() {
   const script = document.createElement('script');
-  script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCXPX52c062dXYvJBITx6gjd2qDcbvi_G0&callback=inicializarMapa&v=weekly`;
+  script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=inicializarMapa&v=weekly`;
   script.async = true;
   script.defer = true;
   script.onerror = function() {
@@ -87,4 +84,25 @@ document.getElementById("formLogin").addEventListener("submit", function(e) {
   } else {
     alert("Correo electrónico o contraseña incorrectos.");
   }
+});
+
+// Mostrar alquileres disponibles (para clientes)
+document.getElementById("btnVerAlquileres").addEventListener("click", function() {
+  // Mostrar el mapa y cargar los alquileres
+  document.getElementById("mapa").style.display = "block";
+  cargarAlquileres();
+  // Ocultar formularios de registro e inicio de sesión
+  document.getElementById("registro").style.display = "none";
+  document.getElementById("login").style.display = "none";
+  document.querySelector(".botones").style.display = "none";
+});
+
+// Mostrar la sección de "Mis alquileres" (para dueños)
+document.getElementById("btnMisAlquileres").addEventListener("click", function() {
+  // Mostrar el formulario de registro e inicio de sesión
+  document.getElementById("registro").style.display = "block";
+  document.getElementById("login").style.display = "block";
+  // Ocultar el mapa y botones de cliente
+  document.getElementById("mapa").style.display = "none";
+  document.querySelector(".botones").style.display = "none";
 });
