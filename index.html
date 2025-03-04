@@ -1,68 +1,21 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alquileres - Página Principal</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="map.js"></script>
-  <style>
-    /* Estilo para el contenedor del mapa */
-    #mapa {
-      height: 500px;
-      width: 100%;
-    }
-    .formulario {
-      margin: 20px 0;
-    }
-    input[type="text"], input[type="password"], button {
-      padding: 10px;
-      margin: 10px 0;
-      width: 100%;
-      max-width: 300px;
-    }
-    .botones {
-      margin: 20px 0;
-      text-align: center;
-    }
-    button {
-      padding: 10px 20px;
-      margin: 5px;
-      font-size: 16px;
-    }
-  </style>
+  <title>Rental Properties</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <h1>Bienvenidos a Alquileres</h1>
+  <header>
+    <h1>Welcome to the Rental Property Service</h1>
+  </header>
   
-  <!-- Botones -->
-  <div class="botones">
-    <button id="btnVerAlquileres">Ver Alquileres Disponibles</button>
-    <button id="btnMisAlquileres">Mis Alquileres</button>
-  </div>
-
-  <!-- Formulario de registro e inicio de sesión -->
-  <div id="registro" class="formulario" style="display:none;">
-    <h2>Registro</h2>
-    <form id="formRegistro">
-      <input type="text" id="nombreRegistro" placeholder="Nombre" required />
-      <input type="email" id="emailRegistro" placeholder="Correo electrónico" required />
-      <input type="password" id="passwordRegistro" placeholder="Contraseña" required />
-      <button type="submit">Registrar</button>
-    </form>
-  </div>
-
-  <div id="login" class="formulario" style="display:none;">
-    <h2>Iniciar sesión</h2>
-    <form id="formLogin">
-      <input type="email" id="emailLogin" placeholder="Correo electrónico" required />
-      <input type="password" id="passwordLogin" placeholder="Contraseña" required />
-      <button type="submit">Iniciar sesión</button>
-    </form>
-  </div>
-
-  <div id="mapa"></div> <!-- Contenedor para el mapa -->
-
+  <main>
+    <button id="view-rentals-btn">View Available Rentals</button>
+    <button id="my-rentals-btn">My Rentals</button>
+  </main>
+  
+  <script src="index.js"></script>
 </body>
 </html>
