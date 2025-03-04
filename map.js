@@ -1,6 +1,6 @@
 let map;
 
-// Función para cargar los alquileres
+// Cargar alquileres desde Google Sheets
 async function cargarAlquileres() {
   try {
     const response = await fetch('https://script.google.com/macros/s/AKfycbxmoiEnvG-x-Ium5QBAuADIPYI_rIy5Y-azdHDQnpmczlEWSTkHNxRge2VvXxR0MR2x/exec?action=obtener_alquileres');
@@ -39,7 +39,7 @@ function inicializarMapa() {
 // Cargar la API de Google Maps y llamar a la función inicializarMapa
 function cargarAPI() {
   const script = document.createElement('script');
-  script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=inicializarMapa&v=weekly`;
+  script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCXPX52c062dXYvJBITx6gjd2qDcbvi_G0&callback=inicializarMapa&v=weekly`;
   script.async = true;
   script.defer = true;
   script.onerror = function() {
