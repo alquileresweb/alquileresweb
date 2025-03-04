@@ -1,3 +1,4 @@
+// Asegúrate de que la clave API esté configurada correctamente en el HTML
 // Este código espera que el DOM esté listo
 document.addEventListener('DOMContentLoaded', function () {
     inicializarMapa();
@@ -5,8 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Esta es la función que se usa para inicializar el mapa
 function inicializarMapa() {
-    // Asegúrate de que la clave API esté correctamente configurada y que el contenedor del mapa exista
-    const mapElement = document.getElementById('map');
+    const mapElement = document.getElementById('map');  // Asegúrate de que el id sea 'map'
     if (!mapElement) {
         console.error('Contenedor del mapa no encontrado.');
         return;
