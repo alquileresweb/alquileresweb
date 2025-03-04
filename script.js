@@ -1,28 +1,30 @@
 // script.js
 
-document.addEventListener("DOMContentLoaded", function () {
-    const formRegistro = document.getElementById("form-registro");
+// Maneja el formulario de registro para el dueño
+document.getElementById("form-registro").addEventListener("submit", function(e) {
+    e.preventDefault();
+    let nombre = document.getElementById("nombre").value;
+    let email = document.getElementById("email").value;
+    let telefono = document.getElementById("telefono").value;
+    let contrasena = document.getElementById("contrasena").value;
 
-    formRegistro.addEventListener("submit", function (e) {
-        e.preventDefault();
+    const data = {
+        nombre: nombre,
+        email: email,
+        telefono: telefono,
+        contrasena: contrasena,
+        action: "registrar_dueño"
+    };
 
-        const nombre = document.getElementById("nombre").value;
-        const email = document.getElementById("email").value;
-        const telefono = document.getElementById("telefono").value;
-        const password = document.getElementById("password").value;
-
-        // Enviar datos al script de Google Apps
-        fetch(GOOGLE_SCRIPT_URL + "?action=registro_usuario", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ nombre, email, telefono, password })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Usuario registrado:', data);
-        })
-        .catch(error => console.error('Error en el registro:', error));
-    });
+    // Enviar datos al Google Apps Script
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(response => response.json())
+    .then(responseData => {
+        alert(responseData.message); // Mensaje de respuesta
+    })
+    .catch(error => console.error('Error al registrar:', error));
 });
