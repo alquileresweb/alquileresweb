@@ -1,5 +1,4 @@
 // map.js
-
 function inicializarMapa() {
     const mapOptions = {
         center: { lat: -34.6037, lng: -58.3816 }, // Buenos Aires, Argentina
