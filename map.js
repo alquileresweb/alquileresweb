@@ -53,3 +53,38 @@ function cargarAPI() {
 
 // Ejecutar la carga de la API cuando se cargue la página
 window.onload = cargarAPI;
+
+// Funciones para manejar el registro y el login
+
+// Manejo de registro
+document.getElementById("formRegistro").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const nombre = document.getElementById("nombreRegistro").value;
+  const email = document.getElementById("emailRegistro").value;
+  const password = document.getElementById("passwordRegistro").value;
+
+  // Validar y guardar usuario en localStorage (o en una base de datos real)
+  if (nombre && email && password) {
+    localStorage.setItem("usuario", JSON.stringify({ nombre, email, password }));
+    alert("¡Registro exitoso! Ahora puedes iniciar sesión.");
+  } else {
+    alert("Por favor, completa todos los campos.");
+  }
+});
+
+// Manejo de login
+document.getElementById("formLogin").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const email = document.getElementById("emailLogin").value;
+  const password = document.getElementById("passwordLogin").value;
+
+  // Validar credenciales desde localStorage (o desde una base de datos real)
+  const usuarioGuardado = JSON.parse(localStorage.getItem("usuario"));
+
+  if (usuarioGuardado && usuarioGuardado.email === email && usuarioGuardado.password === password) {
+    alert("¡Bienvenido de nuevo, " + usuarioGuardado.nombre + "!");
+    // Aquí podrías redirigir al usuario a otra página o permitirle realizar acciones
+  } else {
+    alert("Correo electrónico o contraseña incorrectos.");
+  }
+});
