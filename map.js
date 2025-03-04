@@ -7,7 +7,7 @@ function inicializarMapa() {
         zoom: 12
     };
     const map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    
+
     // Llama a la función para cargar los alquileres
     cargarAlquileres(map);
 }
