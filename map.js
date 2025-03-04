@@ -1,3 +1,5 @@
+let map;
+
 // Función para cargar los alquileres
 async function cargarAlquileres() {
   try {
