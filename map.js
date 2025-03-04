@@ -43,6 +43,9 @@ function cargarAPI() {
   script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCXPX52c062dXYvJBITx6gjd2qDcbvi_G0&callback=inicializarMapa&v=weekly`;
   script.async = true;
   script.defer = true;
+  script.onerror = function() {
+    console.error("Hubo un error al cargar la API de Google Maps.");
+  };
   document.head.appendChild(script);
 }
 
