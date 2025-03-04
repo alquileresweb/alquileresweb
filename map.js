@@ -12,7 +12,7 @@ function inicializarMapa() {
         return;
     }
 
-    // Centra el mapa en Santo Tomé, Corrientes
+    // Centra el mapa en Santo Tomé, Corrientes (código postal 3440)
     const map = new google.maps.Map(mapElement, {
         center: { lat: -29.0296, lng: -57.3801 }, // Coordenadas de Santo Tomé, Corrientes
         zoom: 12,  // Nivel de zoom
