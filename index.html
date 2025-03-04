@@ -12,12 +12,80 @@
       height: 500px;
       width: 100%;
     }
+
+    /* Estilos generales */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding-top: 20px;
+    }
+
+    /* Estilos para las secciones de login y register */
+    .form-container {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .form-container.active {
+      display: block;
+    }
+
+    input[type="text"], input[type="password"], input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Mapa de Alquileres en Santo Tomé</h1>
-  <div id="mapa"></div> <!-- Contenedor para el mapa -->
+  <div class="container">
+    <!-- Sección para el Mapa -->
+    <h1>Mapa de Alquileres en Santo Tomé</h1>
+    <div id="mapa"></div> <!-- Contenedor para el mapa -->
+
+    <!-- Botones para alternar entre Iniciar sesión y Registrarse -->
+    <button onclick="mostrarFormulario('login')">Iniciar Sesión</button>
+    <button onclick="mostrarFormulario('register')">Registrarse</button>
+
+    <!-- Formulario de Iniciar sesión -->
+    <div id="loginForm" class="form-container">
+      <h2>Iniciar Sesión</h2>
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Contraseña" required>
+      <button onclick="iniciarSesion()">Iniciar Sesión</button>
+    </div>
+
+    <!-- Formulario de Registro -->
+    <div id="registerForm" class="form-container">
+      <h2>Registrarse</h2>
+      <input type="text" id="registerName" placeholder="Nombre" required>
+      <input type="email" id="registerEmail" placeholder="Email" required>
+      <input type="password" id="registerPassword" placeholder="Contraseña" required>
+      <button onclick="registrarse()">Registrarse</button>
+    </div>
+  </div>
 
 </body>
 </html>
