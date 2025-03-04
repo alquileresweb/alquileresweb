@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alquileres Web</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa de Alquileres</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="map.js"></script> <!-- Cargar el JS del mapa -->
+  <style>
+    /* Estilo para el contenedor del mapa */
+    #mapa {
+      height: 500px;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-    <div id="map" style="height: 500px;"></div>
 
-    <!-- Carga jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <!-- Cargar archivo de configuración -->
-    <script src="config.js"></script>  <!-- Asegúrate de que esta línea esté antes de los otros scripts -->
-    
-    <!-- Cargar Google Maps API con async y callback -->
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXPX52c062dXYvJBITx6gjd2qDcbvi_G0&callback=inicializarMapa"></script>
-    
-    <!-- Cargar los scripts de mapa y lógica -->
-    <script src="map.js"></script>
-    <script src="script.js"></script>
+  <h1>Mapa de Alquileres en Santo Tomé</h1>
+  <div id="mapa"></div> <!-- Contenedor para el mapa -->
+
 </body>
 </html>
