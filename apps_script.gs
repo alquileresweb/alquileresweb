@@ -60,4 +60,3 @@ function obtenerAlquileres() {
   // Devuelve el array de alquileres
   return alquileres;
 }
-
