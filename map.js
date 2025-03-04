@@ -1,17 +1,26 @@
 let map;
+let alquileres = [];
 
 // Cargar alquileres desde Google Sheets
 async function cargarAlquileres() {
   try {
     const response = await fetch('https://script.google.com/macros/s/AKfycbxmoiEnvG-x-Ium5QBAuADIPYI_rIy5Y-azdHDQnpmczlEWSTkHNxRge2VvXxR0MR2x/exec?action=obtener_alquileres');
-    const alquileres = await response.json();
+    alquileres = await response.json();
 
     if (alquileres.length > 0) {
       alquileres.forEach(alquiler => {
         new google.maps.Marker({
           position: { lat: alquiler.latitud, lng: alquiler.longitud },
           map: map,
-          title: alquiler.direccion
+          title: alquiler.direccion,
+          infoWindow: new google.maps.InfoWindow({
+            content: `
+              <h3>${alquiler.direccion}</h3>
+              <p>Precio: $${alquiler.precio}</p>
+              <p>Habitaciones: ${alquiler.habitaciones}</p>
+              <p>¿Permite mascotas? ${alquiler.permite_mascotas ? 'Sí' : 'No'}</p>
+            `
+          })
         });
       });
     } else {
@@ -29,10 +38,53 @@ function inicializarMapa() {
     lng: -57.3801  // Longitud de Santo Tomé, Corrientes
   };
 
-  // Crear el mapa centrado en Santo Tomé
   map = new google.maps.Map(document.getElementById("mapa"), {
     zoom: 12, // Nivel de zoom adecuado
     center: mapaSantoTome // Coordenadas de Santo Tomé
+  });
+
+  // Mostrar los alquileres
+  cargarAlquileres();
+
+  // Filtros de búsqueda
+  document.getElementById("filtroPrecioMin").addEventListener("change", aplicarFiltros);
+  document.getElementById("filtroPrecioMax").addEventListener("change", aplicarFiltros);
+  document.getElementById("filtroHabitaciones").addEventListener("change", aplicarFiltros);
+  document.getElementById("filtroMascotas").addEventListener("change", aplicarFiltros);
+}
+
+// Aplicar filtros de búsqueda
+function aplicarFiltros() {
+  const precioMin = document.getElementById("filtroPrecioMin").value;
+  const precioMax = document.getElementById("filtroPrecioMax").value;
+  const habitaciones = document.getElementById("filtroHabitaciones").value;
+  const permiteMascotas = document.getElementById("filtroMascotas").value === "si";
+
+  const alquileresFiltrados = alquileres.filter(alquiler => {
+    return (
+      (precioMin ? alquiler.precio >= precioMin : true) &&
+      (precioMax ? alquiler.precio <= precioMax : true) &&
+      (habitaciones ? alquiler.habitaciones >= habitaciones : true) &&
+      (permiteMascotas ? alquiler.permite_mascotas === permiteMascotas : true)
+    );
+  });
+
+  // Limpiar los marcadores existentes y añadir los nuevos filtrados
+  map.clearOverlays();
+  alquileresFiltrados.forEach(alquiler => {
+    new google.maps.Marker({
+      position: { lat: alquiler.latitud, lng: alquiler.longitud },
+      map: map,
+      title: alquiler.direccion,
+      infoWindow: new google.maps.InfoWindow({
+        content: `
+          <h3>${alquiler.direccion}</h3>
+          <p>Precio: $${alquiler.precio}</p>
+          <p>Habitaciones: ${alquiler.habitaciones}</p>
+          <p>¿Permite mascotas? ${alquiler.permite_mascotas ? 'Sí' : 'No'}</p>
+        `
+      })
+    });
   });
 }
 
@@ -99,10 +151,4 @@ document.getElementById("btnVerAlquileres").addEventListener("click", function()
 
 // Mostrar la sección de "Mis alquileres" (para dueños)
 document.getElementById("btnMisAlquileres").addEventListener("click", function() {
-  // Mostrar el formulario de registro e inicio de sesión
-  document.getElementById("registro").style.display = "block";
-  document.getElementById("login").style.display = "block";
-  // Ocultar el mapa y botones de cliente
-  document.getElementById("mapa").style.display = "none";
-  document.querySelector(".botones").style.display = "none";
-});
+  // Mostrar el formulario de registro
