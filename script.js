@@ -1,30 +1,24 @@
-// script.js
+// Asegúrate de que el DOM esté completamente cargado antes de ejecutar el código
+document.addEventListener('DOMContentLoaded', function () {
+    const formulario = document.getElementById('formulario');
+    if (formulario) {
+        formulario.addEventListener('submit', function (event) {
+            event.preventDefault();
 
-// Maneja el formulario de registro para el dueño
-document.getElementById("form-registro").addEventListener("submit", function(e) {
-    e.preventDefault();
-    let nombre = document.getElementById("nombre").value;
-    let email = document.getElementById("email").value;
-    let telefono = document.getElementById("telefono").value;
-    let contrasena = document.getElementById("contrasena").value;
+            // Aquí se captura el valor del campo de texto
+            const valorPago = document.getElementById('valorPago').value;
 
-    const data = {
-        nombre: nombre,
-        email: email,
-        telefono: telefono,
-        contrasena: contrasena,
-        action: "registrar_dueño"
-    };
-
-    // Enviar datos al Google Apps Script
-    fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-    })
-    .then(response => response.json())
-    .then(responseData => {
-        alert(responseData.message); // Mensaje de respuesta
-    })
-    .catch(error => console.error('Error al registrar:', error));
+            // Genera el link de pago de Mercado Pago (este paso es un ejemplo y depende de la API de Mercado Pago)
+            crearLinkDePago(valorPago);
+        });
+    } else {
+        console.log("Formulario no encontrado");
+    }
 });
+
+// Función para crear el link de pago (simulada)
+function crearLinkDePago(valor) {
+    console.log('Generando link de pago con valor: ' + valor);
+    // Aquí iría la lógica para integrar con la API de Mercado Pago
+    alert("Link de pago generado para el valor: " + valor);
+}
