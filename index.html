@@ -3,37 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alquileres</title>
+    <title>Alquileres Web</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Plataforma de Alquileres</h1>
+    <div id="map" style="height: 500px;"></div>
 
-    <!-- Sección de Registro -->
-    <h2>Registro</h2>
-    <form id="registroForm">
-        <input type="text" id="nombre" placeholder="Nombre" required>
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="tel" id="telefono" placeholder="Teléfono" required>
-        <input type="password" id="password" placeholder="Contraseña" required>
-        <button type="submit">Registrar</button>
-    </form>
-
-    <!-- Sección de Inicio de Sesión -->
-    <h2>Iniciar Sesión</h2>
-    <form id="loginForm">
-        <input type="email" id="loginEmail" placeholder="Email" required>
-        <input type="password" id="loginPassword" placeholder="Contraseña" required>
-        <button type="submit">Ingresar</button>
-    </form>
-
-    <!-- Mapa de Alquileres -->
-    <h2>Mapa de Alquileres</h2>
-    <div id="map"></div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="config.js"></script>
-    <script src="script.js"></script>
-    <script src="map.js"></script>
     <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXPX52c062dXYvJBITx6gjd2qDcbvi_G0&callback=inicializarMapa"></script>
+    <script src="map.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
