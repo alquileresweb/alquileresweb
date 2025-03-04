@@ -21,14 +21,29 @@
       width: 100%;
       max-width: 300px;
     }
+    .botones {
+      margin: 20px 0;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Iniciar sesión / Registro</h1>
+  <h1>Mapa de Alquileres</h1>
+  
+  <!-- Botones -->
+  <div class="botones">
+    <button id="btnVerAlquileres">Ver alquileres disponibles</button>
+    <button id="btnMisAlquileres">Mis alquileres</button>
+  </div>
 
-  <!-- Formulario de registro -->
-  <div id="registro" class="formulario">
+  <!-- Formulario de registro e inicio de sesión -->
+  <div id="registro" class="formulario" style="display:none;">
     <h2>Registro</h2>
     <form id="formRegistro">
       <input type="text" id="nombreRegistro" placeholder="Nombre" required />
@@ -38,8 +53,7 @@
     </form>
   </div>
 
-  <!-- Formulario de inicio de sesión -->
-  <div id="login" class="formulario">
+  <div id="login" class="formulario" style="display:none;">
     <h2>Iniciar sesión</h2>
     <form id="formLogin">
       <input type="email" id="emailLogin" placeholder="Correo electrónico" required />
@@ -48,7 +62,6 @@
     </form>
   </div>
 
-  <h1>Mapa de Alquileres en Santo Tomé</h1>
   <div id="mapa"></div> <!-- Contenedor para el mapa -->
 
 </body>
