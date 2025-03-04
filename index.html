@@ -1,21 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rental Properties</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Alquileres</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="map.js"></script>
 </head>
 <body>
+
   <header>
-    <h1>Welcome to the Rental Property Service</h1>
+    <h1>Bienvenidos a Alquileres</h1>
   </header>
-  
-  <main>
-    <button id="view-rentals-btn">View Available Rentals</button>
-    <button id="my-rentals-btn">My Rentals</button>
-  </main>
-  
-  <script src="index.js"></script>
+
+  <!-- Botones principales -->
+  <div class="botones">
+    <button id="btnVerAlquileres">Ver Alquileres Disponibles</button>
+    <button id="btnMisAlquileres">Mis Alquileres</button>
+  </div>
+
+  <!-- Formulario de registro -->
+  <div id="registro" class="formulario" style="display:none;">
+    <h2>Registro</h2>
+    <form id="formRegistro">
+      <input type="text" id="nombreRegistro" placeholder="Nombre" required />
+      <input type="email" id="emailRegistro" placeholder="Correo electrónico" required />
+      <input type="password" id="passwordRegistro" placeholder="Contraseña" required />
+      <button type="submit">Registrar</button>
+    </form>
+  </div>
+
+  <!-- Formulario de login -->
+  <div id="login" class="formulario" style="display:none;">
+    <h2>Iniciar sesión</h2>
+    <form id="formLogin">
+      <input type="email" id="emailLogin" placeholder="Correo electrónico" required />
+      <input type="password" id="passwordLogin" placeholder="Contraseña" required />
+      <button type="submit">Iniciar sesión</button>
+    </form>
+  </div>
+
+  <div id="mapa" style="display:none;"></div> <!-- Contenedor del mapa -->
+
 </body>
 </html>
