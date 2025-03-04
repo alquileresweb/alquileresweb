@@ -25,8 +25,8 @@ async function cargarAlquileres() {
 // Inicializar el mapa
 function inicializarMapa() {
   const mapaSantoTome = {
-    lat: -29.0296, // Latitud de Santo Tomé
-    lng: -57.3801  // Longitud de Santo Tomé
+    lat: -29.0296, // Latitud de Santo Tomé, Corrientes
+    lng: -57.3801  // Longitud de Santo Tomé, Corrientes
   };
 
   // Crear el mapa centrado en Santo Tomé
