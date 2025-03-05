@@ -49,14 +49,17 @@
                 center: centro, // Coordenadas del centro
             });
 
-            // Aquí puedes agregar marcadores si tienes alquileres
-
-            // Ejemplo de marcador
+            // Agregar un marcador de ejemplo en Santo Tomé
             const marker = new google.maps.Marker({
                 position: centro,
                 map: map,
                 title: "Santo Tomé, Corrientes",
             });
+        }
+
+        // Esperar a que la API cargue para inicializar el mapa
+        window.onload = function() {
+            initMap();
         }
 
         // Configuración del botón "Soy dueño"
