@@ -30,15 +30,15 @@
             const email = document.getElementById('email').value;
             const telefono = document.getElementById('telefono').value;
 
-            // Enviar los datos como URLSearchParams
-            fetch('https://script.google.com/macros/s/AKfycbw1YPnoLa-8KfNKJTUYeDey4qoYl28cA1ZNgj9kb73g6w-jAZDB-tNQjuGoILyc09Ax/exec?action=registrarDueno', {
+            fetch('https://script.google.com/macros/s/AKfycbw1YPnoLa-8KfNKJTUYeDey4qoYl28cA1ZNgj9kb73g6w-jAZDB-tNQjuGoILyc09Ax/exec', {
                 method: 'POST',
-                body: new URLSearchParams({
-                    nombre: nombre,
-                    email: email,
-                    telefono: telefono
-                }),  // Usamos URLSearchParams para enviar los datos
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }  // Encabezado adecuado
+                body: JSON.stringify({ 
+                    action: 'registrarDueno', 
+                    nombre: nombre, 
+                    email: email, 
+                    telefono: telefono 
+                }),  // Enviar como JSON
+                headers: { 'Content-Type': 'application/json' }
             })
             .then(response => response.json())  // Aseguramos que la respuesta sea interpretada como JSON
             .then(data => {
@@ -56,3 +56,4 @@
     </script>
 </body>
 </html>
+
