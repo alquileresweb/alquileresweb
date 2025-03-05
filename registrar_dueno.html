@@ -33,12 +33,16 @@
             fetch('https://script.google.com/macros/s/AKfycbw1YPnoLa-8KfNKJTUYeDey4qoYl28cA1ZNgj9kb73g6w-jAZDB-tNQjuGoILyc09Ax/exec?action=registrarDueno', {
                 method: 'POST',
                 body: JSON.stringify({ nombre, email, telefono }),  // Enviar como JSON
-                headers: { 'Content-Type': 'application/json' },
-                mode: 'no-cors'  // Deshabilitar CORS para evitar preflight
+                headers: { 'Content-Type': 'application/json' }
             })
-            .then(response => {
-                // No podremos acceder a la respuesta aquí, pero la solicitud se ejecutará.
-                document.getElementById('mensaje').innerText = 'Dueño registrado con éxito';
+            .then(response => response.json())  // Recibir la respuesta como JSON
+            .then(data => {
+                // Si se recibe un ID, mostrarlo
+                if (data.id) {
+                    document.getElementById('mensaje').innerText = 'Dueño registrado con éxito. ID: ' + data.id;
+                } else {
+                    document.getElementById('mensaje').innerText = 'Hubo un error en el registro.';
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
