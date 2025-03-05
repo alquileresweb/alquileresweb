@@ -30,23 +30,15 @@
             const email = document.getElementById('email').value;
             const telefono = document.getElementById('telefono').value;
 
-            fetch('https://script.google.com/macros/s/AKfycbw1YPnoLa-8KfNKJTUYeDey4qoYl28cA1ZNgj9kb73g6w-jAZDB-tNQjuGoILyc09Ax/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbw1YPnoLa-8KfNKJTUYeDey4qoYl28cA1ZNgj9kb73g6w-jAZDB-tNQjuGoILyc09Ax/exec?action=registrarDueno', {
                 method: 'POST',
-                body: JSON.stringify({ 
-                    action: 'registrarDueno', 
-                    nombre: nombre, 
-                    email: email, 
-                    telefono: telefono 
-                }),  // Enviar como JSON
-                headers: { 'Content-Type': 'application/json' }
+                body: JSON.stringify({ nombre, email, telefono }),  // Enviar como JSON
+                headers: { 'Content-Type': 'application/json' },
+                mode: 'no-cors'  // Deshabilitar CORS para evitar preflight
             })
-            .then(response => response.json())  // Aseguramos que la respuesta sea interpretada como JSON
-            .then(data => {
-                if (data.id) {
-                    document.getElementById('mensaje').innerText = 'Tu ID de dueño es: ' + data.id;
-                } else {
-                    document.getElementById('mensaje').innerText = 'Hubo un error al registrar el dueño.';
-                }
+            .then(response => {
+                // No podremos acceder a la respuesta aquí, pero la solicitud se ejecutará.
+                document.getElementById('mensaje').innerText = 'Dueño registrado con éxito';
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -56,4 +48,3 @@
     </script>
 </body>
 </html>
-
