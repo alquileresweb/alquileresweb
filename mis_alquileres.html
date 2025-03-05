@@ -20,7 +20,13 @@
             const idDueno = document.getElementById('idDueno').value;
             const url = `https://script.google.com/macros/s/AKfycbwY8AKiXi93JEbHe-Hf58fXOPJaTNLl8RNJGOq2LmyVdCLA5IzwSyPQIG-AKXuVhqiDiA/exec?action=obtenerMisAlquileres&idDueno=${idDueno}`;
             
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                method: 'GET',  // Asegúrate de usar GET para las consultas con parámetros
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'  // Permitir solicitudes desde cualquier origen
+                }
+            });
             const data = await response.json();
             let html = '';
             
@@ -43,11 +49,16 @@
         }
 
         async function eliminarAlquiler(id) {
-            await fetch(`https://script.google.com/macros/s/AKfycbwY8AKiXi93JEbHe-Hf58fXOPJaTNLl8RNJGOq2LmyVdCLA5IzwSyPQIG-AKXuVhqiDiA/exec?action=eliminarAlquiler&id=${id}`, { method: 'POST' });
+            await fetch(`https://script.google.com/macros/s/AKfycbwY8AKiXi93JEbHe-Hf58fXOPJaTNLl8RNJGOq2LmyVdCLA5IzwSyPQIG-AKXuVhqiDiA/exec?action=eliminarAlquiler&id=${id}`, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'  // Permitir solicitudes desde cualquier origen
+                }
+            });
             alert('Alquiler eliminado.');
             cargarMisAlquileres();
         }
     </script>
 </body>
 </html>
-
