@@ -43,17 +43,10 @@
             // Coordenadas exactas para Santo Tomé, Corrientes
             const centro = { lat: -29.6464, lng: -57.2375 };
 
-            // Crear el mapa centrado en Santo Tomé
+            // Crear el mapa centrado en Santo Tomé sin marcador
             const map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 12, // Nivel de zoom
                 center: centro, // Coordenadas del centro
-            });
-
-            // Agregar un marcador en la ubicación de Santo Tomé
-            const marker = new google.maps.Marker({
-                position: centro,
-                map: map,
-                title: "Santo Tomé, Corrientes",
             });
         }
 
