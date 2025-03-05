@@ -30,17 +30,24 @@
             const email = document.getElementById('email').value;
             const telefono = document.getElementById('telefono').value;
 
-            fetch('https://script.google.com/macros/s/AKfycbwY8AKiXi93JEbHe-Hf58fXOPJaTNLl8RNJGOq2LmyVdCLA5IzwSyPQIG-AKXuVhqiDiA/exec?action=registrarDueno', {
+            fetch('https://script.google.com/macros/s/AKfycbyzTQ2_l_zXWepsMUlZKzm08HrTIGn-k95yy8OBBYAkDhMxoudL2H0qa2tUdAFLcUOXRw/exec?action=registrarDueno', {
                 method: 'POST',
-                body: JSON.stringify({ nombre, email, telefono }),
-                headers: { 'Content-Type': 'application/json' }
+                body: JSON.stringify({ nombre, email, telefono }),  // Enviar como JSON
+                headers: { 'Content-Type': 'application/json' }  // Asegúrate de usar el encabezado correcto
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('mensaje').innerText = 'Tu ID de dueño es: ' + data.id;
+                if (data.id) {
+                    document.getElementById('mensaje').innerText = 'Tu ID de dueño es: ' + data.id;
+                } else {
+                    document.getElementById('mensaje').innerText = 'Hubo un error al registrar el dueño.';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('mensaje').innerText = 'Hubo un error en la solicitud.';
             });
         });
     </script>
 </body>
 </html>
-
