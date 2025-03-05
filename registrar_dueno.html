@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Dueño</title>
+</head>
+<body>
+    <h1>Registrar Dueño</h1>
+    <form id="formRegistro">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" required>
+
+        <button type="submit">Registrar</button>
+    </form>
+
+    <p id="mensaje"></p>
+
+    <script>
+        document.getElementById('formRegistro').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
+
+            fetch('https://script.google.com/macros/s/TU_SCRIPT_URL/exec?action=registrarDueno', {
+                method: 'POST',
+                body: JSON.stringify({ nombre, email, telefono }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('mensaje').innerText = 'Tu ID de dueño es: ' + data.id;
+            });
+        });
+    </script>
+</body>
+</html>
 
