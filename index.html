@@ -5,43 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alquileres</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="map.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXPX52c062dXYvJBITx6gjd2qDcbvi_G0&callback=initMap" async defer></script>
 </head>
 <body>
-
   <header>
-    <h1>Bienvenidos a Alquileres</h1>
+    <h1>Alquileres Disponibles</h1>
+    <button id="soyDuenio">Soy dueño</button>
   </header>
-
-  <!-- Botones principales -->
-  <div class="botones">
-    <button id="btnVerAlquileres">Ver Alquileres Disponibles</button>
-    <button id="btnMisAlquileres">Mis Alquileres</button>
+  <div id="map"></div>
+  <div id="filtros">
+    <h2>Filtros de Búsqueda</h2>
+    <label for="ambientes">Ambientes:</label>
+    <input type="number" id="ambientes" name="ambientes">
+    <label for="precio">Precio máximo:</label>
+    <input type="number" id="precio" name="precio">
+    <label for="mascotas">Permite mascotas:</label>
+    <select id="mascotas" name="mascotas">
+      <option value="">Seleccione</option>
+      <option value="Sí">Sí</option>
+      <option value="No">No</option>
+    </select>
+    <button onclick="filtrarAlquileres()">Filtrar</button>
   </div>
-
-  <!-- Formulario de registro -->
-  <div id="registro" class="formulario" style="display:none;">
-    <h2>Registro</h2>
-    <form id="formRegistro">
-      <input type="text" id="nombreRegistro" placeholder="Nombre" required />
-      <input type="email" id="emailRegistro" placeholder="Correo electrónico" required />
-      <input type="password" id="passwordRegistro" placeholder="Contraseña" required />
-      <button type="submit">Registrar</button>
-    </form>
-  </div>
-
-  <!-- Formulario de login -->
-  <div id="login" class="formulario" style="display:none;">
-    <h2>Iniciar sesión</h2>
-    <form id="formLogin">
-      <input type="email" id="emailLogin" placeholder="Correo electrónico" required />
-      <input type="password" id="passwordLogin" placeholder="Contraseña" required />
-      <button type="submit">Iniciar sesión</button>
-    </form>
-  </div>
-
-  <div id="mapa" style="display:none;"></div> <!-- Contenedor del mapa -->
-
+  <script src="script.js"></script>
 </body>
 </html>
