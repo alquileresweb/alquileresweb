@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Alquileres</title>
+</head>
+<body>
+    <h1>Mis Alquileres</h1>
+    
+    <label for="idDueno">ID de Dueño:</label>
+    <input type="text" id="idDueno">
+    <button onclick="cargarMisAlquileres()">Buscar</button>
+
+    <div id="listaAlquileres"></div>
+    <button onclick="window.location.href='registrar_alquiler.html'">Añadir nuevo alquiler</button>
+
+    <script>
+        function cargarMisAlquileres() {
+            const idDueno = document.getElementById('idDueno').value;
+            fetch(`https://script.google.com/macros/s/TU_SCRIPT_URL/exec?action=obtenerAlquileres&idDueno=${idDueno}`)
+                .then(response => response.json())
+                .then(data => {
+                    let html = '';
+                    data.forEach(alquiler => {
+                        html += `
+                            <div>
+                                <h3>${alquiler.direccion}</h3>
+                                <p>Precio: ${alquiler.precio}</p>
+                                <p>Estado: ${alquiler.estado}</p>
+                                <button onclick="editarAlquiler('${alquiler.id}')">Editar</button>
+                                <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
+                            </div>
+                        `;
+                    });
+                    document.getElementById('listaAlquileres').innerHTML = html;
+                });
+        }
+
+        function editarAlquiler(id) {
+            alert('Función para editar el alquiler con ID: ' + id);
+        }
+
+        function eliminarAlquiler(id) {
+            fetch(`https://script.google.com/macros/s/TU_SCRIPT_URL/exec?action=eliminarAlquiler&id=${id}`, { method: 'POST' })
+                .then(() => {
+                    alert('Alquiler eliminado.');
+                    cargarMisAlquileres();
+                });
+        }
+    </script>
+</body>
+</html>
 
