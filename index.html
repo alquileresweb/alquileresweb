@@ -12,10 +12,57 @@
             height: 400px;
             width: 100%;
         }
+        /* Asegúrate de que el botón sea visible */
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
+    <h1>Mapa de Alquileres en Santo Tomé, Corrientes</h1>
+
+    <!-- Botón para dueño -->
+    <button id="soyDuenio">Soy dueño</button>
+
+    <!-- Mapa -->
     <div id="map"></div>
-    <script src="script.js"></script>
+
+    <script>
+        // Función para inicializar el mapa
+        function initMap() {
+            // Centro del mapa (Santo Tomé, Corrientes)
+            const centro = { lat: -29.6464, lng: -57.2375 };
+
+            // Crear el mapa centrado en Santo Tomé
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 12, // Nivel de zoom
+                center: centro, // Coordenadas del centro
+            });
+
+            // Aquí puedes agregar marcadores si tienes alquileres
+
+            // Ejemplo de marcador
+            const marker = new google.maps.Marker({
+                position: centro,
+                map: map,
+                title: "Santo Tomé, Corrientes",
+            });
+        }
+
+        // Configuración del botón "Soy dueño"
+        document.getElementById('soyDuenio').addEventListener('click', function() {
+          window.location.href = '/dueno.html';  // Redirige a la página del dueño
+        });
+    </script>
 </body>
 </html>
