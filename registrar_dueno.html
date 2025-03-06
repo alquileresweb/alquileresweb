@@ -30,14 +30,15 @@
             const email = document.getElementById('email').value;
             const telefono = document.getElementById('telefono').value;
 
-            fetch('https://script.google.com/macros/s/AKfycbyxPM0uxGzPAqh2yl2tW1fMsIuRMD3rf5WEBCIJhug23EXRt8zinzg943DkBRd0vqIRcA/exec?action=registrarDueno', {
+            // Crear la URL con los parámetros
+            const url = 'https://script.google.com/macros/s/AKfycbyxPM0uxGzPAqh2yl2tW1fMsIuRMD3rf5WEBCIJhug23EXRt8zinzg943DkBRd0vqIRcA/exec?action=registrarDueno&nombre=' + encodeURIComponent(nombre) + '&email=' + encodeURIComponent(email) + '&telefono=' + encodeURIComponent(telefono);
+
+            // Realizar la solicitud POST
+            fetch(url, {
                 method: 'POST',
-                body: JSON.stringify({ nombre, email, telefono }),
-                headers: { 'Content-Type': 'application/json' },
-                mode: 'no-cors'  // Aquí se agrega no-cors
+                mode: 'no-cors'
             })
             .then(() => {
-                // Solo mostramos un mensaje de éxito, ya que no podemos acceder a la respuesta
                 document.getElementById('mensaje').innerText = 'Dueño registrado con éxito.';
             })
             .catch(error => {
