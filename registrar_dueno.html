@@ -33,7 +33,10 @@
             fetch('https://script.google.com/macros/s/AKfycbx8OAfaT2K5tibec5lgLO5IS3ILVdaiooLnm96VIidjowxMdjsuMpEa71EKr9XUNMUOPg/exec?action=registrarDueno', {
                 method: 'POST',
                 body: JSON.stringify({ nombre, email, telefono }),  // Enviar como JSON
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'method': 'POST' // Este encabezado es importante para permitir la solicitud POST
+                }
             })
             .then(response => response.json())  // Recibir la respuesta como JSON
             .then(data => {
