@@ -18,7 +18,7 @@
     <script>
         async function cargarMisAlquileres() {
             const idDueno = document.getElementById('idDueno').value;
-            const url = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idDueno}`;
+            const url = `https://script.google.com/macros/s/AKfycb.../exec?action=obtenerMisAlquileres&idPropietario=${idDueno}`;
 
             try {
                 const response = await fetch(url, {
@@ -58,7 +58,7 @@
         }
 
         async function eliminarAlquiler(id) {
-            await fetch(`https://script.google.com/macros/s/AKfycbyxPM0uxGzPAqh2yl2tW1fMsIuRMD3rf5WEBCIJhug23EXRt8zinzg943DkBRd0vqIRcA/exec?action=eliminarAlquiler&idAlquiler=${id}`, { 
+            await fetch(`https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=eliminarAlquiler&idAlquiler=${id}`, { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
