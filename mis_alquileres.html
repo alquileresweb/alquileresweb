@@ -16,26 +16,20 @@
     <button onclick="window.location.href='registrar_alquiler.html'">Añadir nuevo alquiler</button>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/TU-NUEVA-URL/exec";
-
         async function cargarMisAlquileres() {
             const idDueno = document.getElementById('idDueno').value;
-            if (!idDueno) {
-                alert("Por favor, ingresa un ID de Dueño.");
-                return;
-            }
+            const url = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idDueno}`;
 
             try {
-                const response = await fetch(`${API_URL}?action=obtenerMisAlquileres&idPropietario=${idDueno}`, {
-                    method: "GET",
-                    mode: "cors",
-                    headers: { "Content-Type": "application/json" }
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
                 });
 
-                if (!response.ok) throw new Error("Error en la solicitud");
+                if (!response.ok) throw new Error('Error en la solicitud');
 
                 const data = await response.json();
-                let html = "";
+                let html = '';
 
                 if (data.length === 0) {
                     html = "<p>No se encontraron alquileres para este ID.</p>";
@@ -53,35 +47,24 @@
                     });
                 }
 
-                document.getElementById("listaAlquileres").innerHTML = html;
+                document.getElementById('listaAlquileres').innerHTML = html;
             } catch (error) {
-                console.error("Error:", error);
-                alert("Hubo un problema al obtener los alquileres.");
+                console.error('Error:', error);
             }
         }
 
         function editarAlquiler(id) {
-            window.location.href = `editar_alquiler.html?id=${id}`;
+            alert('Función para editar el alquiler con ID: ' + id);
         }
 
         async function eliminarAlquiler(id) {
-            if (!confirm("¿Seguro que quieres eliminar este alquiler?")) return;
+            await fetch(`https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=eliminarAlquiler&idAlquiler=${id}`, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
 
-            try {
-                const response = await fetch(`${API_URL}?action=eliminarAlquiler&idAlquiler=${id}`, {
-                    method: "POST",
-                    mode: "cors",
-                    headers: { "Content-Type": "application/json" }
-                });
-
-                if (!response.ok) throw new Error("Error al eliminar el alquiler");
-
-                alert("Alquiler eliminado correctamente.");
-                cargarMisAlquileres();
-            } catch (error) {
-                console.error("Error:", error);
-                alert("No se pudo eliminar el alquiler.");
-            }
+            alert('Alquiler eliminado.');
+            cargarMisAlquileres();
         }
     </script>
 </body>
