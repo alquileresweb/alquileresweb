@@ -30,7 +30,7 @@
             const email = document.getElementById('email').value;
             const telefono = document.getElementById('telefono').value;
 
-            fetch('https://script.google.com/macros/s/AKfycbx8OAfaT2K5tibec5lgLO5IS3ILVdaiooLnm96VIidjowxMdjsuMpEa71EKr9XUNMUOPg/exec?action=registrarDueno', {
+            fetch('https://script.google.com/macros/s/AKfycbw1YPnoLa-8KfNKJTUYeDey4qoYl28cA1ZNgj9kb73g6w-jAZDB-tNQjuGoILyc09Ax/exec?action=registrarDueno', {
                 method: 'POST',
                 body: JSON.stringify({ nombre, email, telefono }),  // Enviar como JSON
                 headers: { 'Content-Type': 'application/json' }
