@@ -14,6 +14,24 @@
       background-color: red;
       color: white;
     }
+
+    .editar {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .input-edit {
+      width: 150px;
+      margin-left: 10px;
+    }
+
+    .alquiler-container {
+      margin-bottom: 20px;
+    }
+
+    .campo-edicion {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -60,23 +78,53 @@
           let alquileresHtml = '';
           data.forEach(alquiler => {
             alquileresHtml += `
-              <div>
+              <div class="alquiler-container" id="alquiler-${alquiler.id}">
                 <h3>Alquiler en: ${alquiler.direccion}</h3>
 
-                <label>Dirección:</label>
-                <input type="text" value="${alquiler.direccion}" id="direccion-${alquiler.id}" />
+                <div>
+                  <span>Dirección:</span>
+                  <span>${alquiler.direccion}</span>
+                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
+                  <div class="campo-edicion" id="campo-direccion-${alquiler.id}">
+                    <input type="text" class="input-edit" value="${alquiler.direccion}" id="direccion-${alquiler.id}" />
+                  </div>
+                </div>
 
-                <label>Ambientes:</label>
-                <input type="number" value="${alquiler.ambientes}" id="ambientes-${alquiler.id}" />
+                <div>
+                  <span>Ambientes:</span>
+                  <span>${alquiler.ambientes}</span>
+                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
+                  <div class="campo-edicion" id="campo-ambientes-${alquiler.id}">
+                    <input type="number" class="input-edit" value="${alquiler.ambientes}" id="ambientes-${alquiler.id}" />
+                  </div>
+                </div>
 
-                <label>Precio:</label>
-                <input type="number" value="${alquiler.precio}" id="precio-${alquiler.id}" />
+                <div>
+                  <span>Precio:</span>
+                  <span>${alquiler.precio}</span>
+                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
+                  <div class="campo-edicion" id="campo-precio-${alquiler.id}">
+                    <input type="number" class="input-edit" value="${alquiler.precio}" id="precio-${alquiler.id}" />
+                  </div>
+                </div>
 
-                <label>Mascotas Permitidas:</label>
-                <input type="text" value="${alquiler.mascotas}" id="mascotas-${alquiler.id}" />
+                <div>
+                  <span>Mascotas Permitidas:</span>
+                  <span>${alquiler.mascotas}</span>
+                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
+                  <div class="campo-edicion" id="campo-mascotas-${alquiler.id}">
+                    <input type="text" class="input-edit" value="${alquiler.mascotas}" id="mascotas-${alquiler.id}" />
+                  </div>
+                </div>
 
-                <label>WhatsApp:</label>
-                <input type="text" value="${alquiler.whatsapp}" id="whatsapp-${alquiler.id}" />
+                <div>
+                  <span>WhatsApp:</span>
+                  <span>${alquiler.whatsapp}</span>
+                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
+                  <div class="campo-edicion" id="campo-whatsapp-${alquiler.id}">
+                    <input type="text" class="input-edit" value="${alquiler.whatsapp}" id="whatsapp-${alquiler.id}" />
+                  </div>
+                </div>
 
                 <button class="${alquiler.estado === 'Activo' ? 'activo' : 'inactivo'}" 
                         onclick="cambiarEstadoAlquiler('${alquiler.id}', '${alquiler.estado}')">
@@ -94,6 +142,41 @@
         console.error('Error al obtener los alquileres:', error);
         alquileresListaDiv.innerHTML = `<p>Error: ${error.message}</p>`;
       }
+    }
+
+    // Función para activar o desactivar un alquiler
+    async function cambiarEstadoAlquiler(id, estado) {
+      const nuevoEstado = estado === 'Activo' ? 'Inactivo' : 'Activo';
+      console.log(`Cambiando estado del alquiler con ID ${id} a ${nuevoEstado}`);
+
+      // Cambiar el color del botón
+      const botonEstado = document.querySelector(`button[onclick="cambiarEstadoAlquiler('${id}', '${estado}')"]`);
+      if (nuevoEstado === 'Activo') {
+        botonEstado.classList.remove('inactivo');
+        botonEstado.classList.add('activo');
+        botonEstado.textContent = 'Desactivar';
+      } else {
+        botonEstado.classList.remove('activo');
+        botonEstado.classList.add('inactivo');
+        botonEstado.textContent = 'Activar';
+      }
+
+      // Aquí actualizamos la columna E en Google Sheets
+      const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=cambiarEstado&idAlquiler=${id}&nuevoEstado=${nuevoEstado}`;
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error('Error al cambiar el estado');
+        }
+      } catch (error) {
+        console.error('Error al cambiar el estado en Google Sheets:', error);
+      }
+    }
+
+    // Función para editar un alquiler
+    function editarAlquiler(id) {
+      const camposEdicion = document.querySelectorAll(`#campo-direccion-${id}, #campo-ambientes-${id}, #campo-precio-${id}, #campo-mascotas-${id}, #campo-whatsapp-${id}`);
+      camposEdicion.forEach(campo => campo.style.display = 'inline-block');
     }
 
     // Función para guardar los cambios realizados en un alquiler
@@ -121,28 +204,6 @@
         // Ejemplo:
         // fetch('https://mi-backend.com/eliminar-alquiler', { ... })
       }
-    }
-
-    // Función para cambiar el estado de un alquiler (Activo/Inactivo)
-    function cambiarEstadoAlquiler(id, estado) {
-      const nuevoEstado = estado === 'Activo' ? 'Inactivo' : 'Activo';
-      console.log(`Cambiando estado del alquiler con ID ${id} a ${nuevoEstado}`);
-
-      // Cambiar el color del botón
-      const botonEstado = document.querySelector(`button[onclick="cambiarEstadoAlquiler('${id}', '${estado}')"]`);
-      if (nuevoEstado === 'Activo') {
-        botonEstado.classList.remove('inactivo');
-        botonEstado.classList.add('activo');
-        botonEstado.textContent = 'Desactivar';
-      } else {
-        botonEstado.classList.remove('activo');
-        botonEstado.classList.add('inactivo');
-        botonEstado.textContent = 'Activar';
-      }
-
-      // Llama a la API para actualizar el estado del alquiler
-      // Ejemplo:
-      // fetch('https://mi-backend.com/cambiar-estado', { ... })
     }
   </script>
 </body>
