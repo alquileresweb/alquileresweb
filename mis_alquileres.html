@@ -1,66 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Alquileres</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Alquileres</title>
 </head>
 <body>
-    <h1>Mis Alquileres</h1>
-    
-    <label for="idDueno">ID de Dueño:</label>
-    <input type="text" id="idDueno">
-    <button onclick="cargarMisAlquileres()">Buscar</button>
+  <h1>Mis Alquileres</h1>
+  
+  <label for="idPropietario">ID Propietario:</label>
+  <input type="text" id="idPropietario" name="idPropietario">
+  <button onclick="cargarMisAlquileres()">Cargar Alquileres</button>
+  
+  <div id="resultado"></div>
 
-    <div id="listaAlquileres"></div>
-    <button onclick="window.location.href='registrar_alquiler.html'">Añadir nuevo alquiler</button>
+  <script>
+    function cargarMisAlquileres() {
+      const idPropietario = document.getElementById('idPropietario').value;
 
-    <script>
-        async function cargarMisAlquileres() {
-            const idDueno = document.getElementById('idDueno').value;
-            const url = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idDueno}`;
-
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (!response.ok) throw new Error('Error en la solicitud');
-
-                const data = await response.json();
-                let html = '';
-
-                if (data.length === 0) {
-                    html = "<p>No se encontraron alquileres para este ID.</p>";
-                } else {
-                    data.forEach(alquiler => {
-                        html += `
-                            <div>
-                                <h3>${alquiler.direccion}</h3>
-                                <p>Precio: ${alquiler.precio}</p>
-                                <p>Estado: ${alquiler.estado}</p>
-                                <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
-                            </div>
-                        `;
-                    });
-                }
-
-                document.getElementById('listaAlquileres').innerHTML = html;
-            } catch (error) {
-                console.error('Error:', error);
-            }
+      fetch(`https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
         }
-
-        async function eliminarAlquiler(id) {
-            await fetch(`https://script.google.com/macros/s/.../exec?action=eliminarAlquiler&idAlquiler=${id}`, { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            });
-
-            alert('Alquiler eliminado.');
-            cargarMisAlquileres();
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          document.getElementById('resultado').innerHTML = data.error;
+        } else {
+          let html = '<ul>';
+          data.forEach(alquiler => {
+            html += `<li>ID: ${alquiler.id} - Dirección: ${alquiler.direccion} - Precio: ${alquiler.precio}</li>`;
+          });
+          html += '</ul>';
+          document.getElementById('resultado').innerHTML = html;
         }
-    </script>
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('resultado').innerHTML = 'Error al cargar los alquileres.';
+      });
+    }
+  </script>
 </body>
 </html>
