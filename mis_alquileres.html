@@ -23,10 +23,11 @@
       
       try {
         // Usar un proxy para evitar problemas de CORS
-        const proxyUrl = 'http://localhost:5000/proxy/'; // Asegúrate de que no tiene https://
-        const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
+        const proxyUrl = 'http://localhost:5000/proxy/'; // Asegúrate de que tiene http://
+const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
         
-        const fullUrl = proxyUrl + apiUrl; // Concatenamos las dos partes
+const fullUrl = proxyUrl + apiUrl; // Concatenamos las dos partes
+
 
         console.log(`Solicitando datos desde: ${fullUrl}`); // Log de la URL solicitada
 
