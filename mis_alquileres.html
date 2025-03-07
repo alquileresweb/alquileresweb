@@ -16,64 +16,50 @@
     <button onclick="window.location.href='registrar_alquiler.html'">Añadir nuevo alquiler</button>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec";
-
         async function cargarMisAlquileres() {
-            const idDueno = document.getElementById('idDueno').value.trim();
-            if (!idDueno) {
-                alert("Por favor, ingrese un ID de dueño válido.");
-                return;
-            }
+            const idDueno = document.getElementById('idDueno').value;
+            const url = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idDueno}`;
 
             try {
-                const response = await fetch(`${API_URL}?action=obtenerMisAlquileres&idPropietario=${idDueno}`);
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!response.ok) throw new Error('Error en la solicitud');
+
                 const data = await response.json();
-                mostrarAlquileres(data);
+                let html = '';
+
+                if (data.length === 0) {
+                    html = "<p>No se encontraron alquileres para este ID.</p>";
+                } else {
+                    data.forEach(alquiler => {
+                        html += `
+                            <div>
+                                <h3>${alquiler.direccion}</h3>
+                                <p>Precio: ${alquiler.precio}</p>
+                                <p>Estado: ${alquiler.estado}</p>
+                                <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
+                            </div>
+                        `;
+                    });
+                }
+
+                document.getElementById('listaAlquileres').innerHTML = html;
             } catch (error) {
                 console.error('Error:', error);
-                alert("Hubo un error al cargar los alquileres.");
             }
-        }
-
-        function mostrarAlquileres(alquileres) {
-            const contenedor = document.getElementById('listaAlquileres');
-            contenedor.innerHTML = "";
-
-            if (alquileres.length === 0) {
-                contenedor.innerHTML = "<p>No se encontraron alquileres para este ID.</p>";
-                return;
-            }
-
-            alquileres.forEach(alquiler => {
-                const div = document.createElement("div");
-                div.innerHTML = `
-                    <h3>${alquiler.direccion}</h3>
-                    <p>Ambientes: ${alquiler.ambientes}</p>
-                    <p>Precio: $${alquiler.precio}</p>
-                    <p>Mascotas: ${alquiler.mascotas ? "Sí" : "No"}</p>
-                    <p>Estado: ${alquiler.estado}</p>
-                    <button onclick="editarAlquiler('${alquiler.id}')">Editar</button>
-                    <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
-                `;
-                contenedor.appendChild(div);
-            });
-        }
-
-        function editarAlquiler(id) {
-            alert('Función para editar el alquiler con ID: ' + id);
         }
 
         async function eliminarAlquiler(id) {
-            if (!confirm("¿Seguro que quieres eliminar este alquiler?")) return;
-            
-            try {
-                await fetch(`${API_URL}?action=eliminarAlquiler&idAlquiler=${id}`, { method: 'POST' });
-                alert('Alquiler eliminado.');
-                cargarMisAlquileres();
-            } catch (error) {
-                console.error('Error:', error);
-                alert("Hubo un error al eliminar el alquiler.");
-            }
+            await fetch(`https://script.google.com/macros/s/.../exec?action=eliminarAlquiler&idAlquiler=${id}`, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            alert('Alquiler eliminado.');
+            cargarMisAlquileres();
         }
     </script>
 </body>
