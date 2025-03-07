@@ -54,7 +54,12 @@
                 Ambientes: ${alquiler.ambientes} <br>
                 Precio: ${alquiler.precio} <br>
                 Mascotas Permitidas: ${alquiler.mascotas ? 'Sí' : 'No'} <br>
-                Estado: ${alquiler.estado} <br><br>
+                Estado: ${alquiler.estado} <br>
+                
+                <!-- Botones para editar, eliminar y cambiar estado -->
+                <button onclick="editarAlquiler(${alquiler.latitud}, ${alquiler.longitud}, '${alquiler.direccion}', ${alquiler.ambientes}, ${alquiler.precio}, '${alquiler.mascotas}', '${alquiler.estado}', ${alquiler.whatsapp}, ${idPropietario})">Editar</button>
+                <button onclick="eliminarAlquiler('${alquiler.direccion}')">Eliminar</button>
+                <button onclick="cambiarEstadoAlquiler('${alquiler.direccion}', '${alquiler.estado}')">Activo/Inactivo</button>
               </li>
             `;
           });
@@ -65,6 +70,45 @@
         console.error('Error al obtener los alquileres:', error);
         alquileresListaDiv.innerHTML = `<p>Error: ${error.message}</p>`;
       }
+    }
+
+    // Función para editar un alquiler
+    function editarAlquiler(latitud, longitud, direccion, ambientes, precio, mascotas, estado, whatsapp, idPropietario) {
+      const nuevaDireccion = prompt("Editar dirección:", direccion);
+      const nuevosAmbientes = prompt("Editar ambientes:", ambientes);
+      const nuevoPrecio = prompt("Editar precio:", precio);
+      const nuevoMascotas = prompt("¿Permite mascotas? (Sí/No):", mascotas);
+      const nuevoEstado = prompt("Editar estado (Activo/Inactivo):", estado);
+      const nuevoWhatsapp = prompt("Editar WhatsApp:", whatsapp);
+
+      // Aquí puedes enviar estos datos a la API para actualizar el alquiler
+      console.log(`Actualizar alquiler: ${nuevaDireccion}, ${nuevosAmbientes}, ${nuevoPrecio}, ${nuevoMascotas}, ${nuevoEstado}, ${nuevoWhatsapp}`);
+
+      // Llama a la API para actualizar los datos (esta parte debe ser implementada en el backend)
+      // Ejemplo:
+      // fetch('https://mi-backend.com/actualizar-alquiler', { ... })
+    }
+
+    // Función para eliminar un alquiler
+    function eliminarAlquiler(direccion) {
+      if (confirm(`¿Estás seguro de que deseas eliminar el alquiler en ${direccion}?`)) {
+        // Aquí puedes enviar la solicitud de eliminación a la API
+        console.log(`Eliminando alquiler en ${direccion}`);
+
+        // Llama a la API para eliminar el alquiler (esta parte debe ser implementada en el backend)
+        // Ejemplo:
+        // fetch('https://mi-backend.com/eliminar-alquiler', { ... })
+      }
+    }
+
+    // Función para cambiar el estado del alquiler (Activo/Inactivo)
+    function cambiarEstadoAlquiler(direccion, estado) {
+      const nuevoEstado = estado === 'Activo' ? 'Inactivo' : 'Activo';
+      console.log(`Cambiando estado del alquiler en ${direccion} a ${nuevoEstado}`);
+
+      // Llama a la API para actualizar el estado del alquiler (esta parte debe ser implementada en el backend)
+      // Ejemplo:
+      // fetch('https://mi-backend.com/cambiar-estado', { ... })
     }
   </script>
 </body>
