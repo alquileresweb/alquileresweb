@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mis Alquileres</title>
+  <style>
+    .activo {
+      background-color: green;
+      color: white;
+    }
+
+    .inactivo {
+      background-color: red;
+      color: white;
+    }
+  </style>
 </head>
 <body>
   <h1>Mis Alquileres</h1>
@@ -46,24 +57,37 @@
         if (data.length === 0) {
           alquileresListaDiv.innerHTML = '<p>No se encontraron alquileres.</p>';
         } else {
-          let alquileresHtml = '<ul>';
+          let alquileresHtml = '';
           data.forEach(alquiler => {
-            alquileresHtml += ` 
-              <li>
-                Dirección: ${alquiler.direccion} <br>
-                Ambientes: ${alquiler.ambientes} <br>
-                Precio: ${alquiler.precio} <br>
-                Mascotas Permitidas: ${alquiler.mascotas ? 'Sí' : 'No'} <br>
-                Estado: ${alquiler.estado} <br>
-                
-                <!-- Botones para editar, eliminar y cambiar estado -->
-                <button onclick="editarAlquiler(${alquiler.latitud}, ${alquiler.longitud}, '${alquiler.direccion}', ${alquiler.ambientes}, ${alquiler.precio}, '${alquiler.mascotas}', '${alquiler.estado}', ${alquiler.whatsapp}, ${idPropietario})">Editar</button>
-                <button onclick="eliminarAlquiler('${alquiler.direccion}')">Eliminar</button>
-                <button onclick="cambiarEstadoAlquiler('${alquiler.direccion}', '${alquiler.estado}')">Activo/Inactivo</button>
-              </li>
+            alquileresHtml += `
+              <div>
+                <h3>Alquiler en: ${alquiler.direccion}</h3>
+
+                <label>Dirección:</label>
+                <input type="text" value="${alquiler.direccion}" id="direccion-${alquiler.id}" />
+
+                <label>Ambientes:</label>
+                <input type="number" value="${alquiler.ambientes}" id="ambientes-${alquiler.id}" />
+
+                <label>Precio:</label>
+                <input type="number" value="${alquiler.precio}" id="precio-${alquiler.id}" />
+
+                <label>Mascotas Permitidas:</label>
+                <input type="text" value="${alquiler.mascotas}" id="mascotas-${alquiler.id}" />
+
+                <label>WhatsApp:</label>
+                <input type="text" value="${alquiler.whatsapp}" id="whatsapp-${alquiler.id}" />
+
+                <button class="${alquiler.estado === 'Activo' ? 'activo' : 'inactivo'}" 
+                        onclick="cambiarEstadoAlquiler('${alquiler.id}', '${alquiler.estado}')">
+                  ${alquiler.estado === 'Activo' ? 'Desactivar' : 'Activar'}
+                </button>
+
+                <button onclick="guardarCambios('${alquiler.id}')">Guardar Cambios</button>
+                <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
+              </div>
             `;
           });
-          alquileresHtml += '</ul>';
           alquileresListaDiv.innerHTML = alquileresHtml;
         }
       } catch (error) {
@@ -72,41 +96,51 @@
       }
     }
 
-    // Función para editar un alquiler
-    function editarAlquiler(latitud, longitud, direccion, ambientes, precio, mascotas, estado, whatsapp, idPropietario) {
-      const nuevaDireccion = prompt("Editar dirección:", direccion);
-      const nuevosAmbientes = prompt("Editar ambientes:", ambientes);
-      const nuevoPrecio = prompt("Editar precio:", precio);
-      const nuevoMascotas = prompt("¿Permite mascotas? (Sí/No):", mascotas);
-      const nuevoEstado = prompt("Editar estado (Activo/Inactivo):", estado);
-      const nuevoWhatsapp = prompt("Editar WhatsApp:", whatsapp);
+    // Función para guardar los cambios realizados en un alquiler
+    function guardarCambios(id) {
+      const nuevaDireccion = document.getElementById(`direccion-${id}`).value;
+      const nuevosAmbientes = document.getElementById(`ambientes-${id}`).value;
+      const nuevoPrecio = document.getElementById(`precio-${id}`).value;
+      const nuevoMascotas = document.getElementById(`mascotas-${id}`).value;
+      const nuevoWhatsapp = document.getElementById(`whatsapp-${id}`).value;
 
-      // Aquí puedes enviar estos datos a la API para actualizar el alquiler
-      console.log(`Actualizar alquiler: ${nuevaDireccion}, ${nuevosAmbientes}, ${nuevoPrecio}, ${nuevoMascotas}, ${nuevoEstado}, ${nuevoWhatsapp}`);
+      console.log(`Guardando cambios para el alquiler con ID ${id}`);
+      console.log(`Dirección: ${nuevaDireccion}, Ambientes: ${nuevosAmbientes}, Precio: ${nuevoPrecio}, Mascotas: ${nuevoMascotas}, WhatsApp: ${nuevoWhatsapp}`);
 
-      // Llama a la API para actualizar los datos (esta parte debe ser implementada en el backend)
+      // Aquí deberías enviar estos datos a la API para actualizar el alquiler
       // Ejemplo:
       // fetch('https://mi-backend.com/actualizar-alquiler', { ... })
     }
 
     // Función para eliminar un alquiler
-    function eliminarAlquiler(direccion) {
-      if (confirm(`¿Estás seguro de que deseas eliminar el alquiler en ${direccion}?`)) {
-        // Aquí puedes enviar la solicitud de eliminación a la API
-        console.log(`Eliminando alquiler en ${direccion}`);
+    function eliminarAlquiler(id) {
+      if (confirm(`¿Estás seguro de que deseas eliminar este alquiler?`)) {
+        console.log(`Eliminando alquiler con ID ${id}`);
 
-        // Llama a la API para eliminar el alquiler (esta parte debe ser implementada en el backend)
+        // Llama a la API para eliminar el alquiler
         // Ejemplo:
         // fetch('https://mi-backend.com/eliminar-alquiler', { ... })
       }
     }
 
-    // Función para cambiar el estado del alquiler (Activo/Inactivo)
-    function cambiarEstadoAlquiler(direccion, estado) {
+    // Función para cambiar el estado de un alquiler (Activo/Inactivo)
+    function cambiarEstadoAlquiler(id, estado) {
       const nuevoEstado = estado === 'Activo' ? 'Inactivo' : 'Activo';
-      console.log(`Cambiando estado del alquiler en ${direccion} a ${nuevoEstado}`);
+      console.log(`Cambiando estado del alquiler con ID ${id} a ${nuevoEstado}`);
 
-      // Llama a la API para actualizar el estado del alquiler (esta parte debe ser implementada en el backend)
+      // Cambiar el color del botón
+      const botonEstado = document.querySelector(`button[onclick="cambiarEstadoAlquiler('${id}', '${estado}')"]`);
+      if (nuevoEstado === 'Activo') {
+        botonEstado.classList.remove('inactivo');
+        botonEstado.classList.add('activo');
+        botonEstado.textContent = 'Desactivar';
+      } else {
+        botonEstado.classList.remove('activo');
+        botonEstado.classList.add('inactivo');
+        botonEstado.textContent = 'Activar';
+      }
+
+      // Llama a la API para actualizar el estado del alquiler
       // Ejemplo:
       // fetch('https://mi-backend.com/cambiar-estado', { ... })
     }
