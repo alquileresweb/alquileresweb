@@ -93,7 +93,6 @@
                 <div>
                   <span>Ambientes:</span>
                   <span>${alquiler.ambientes}</span>
-                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
                   <div class="campo-edicion" id="campo-ambientes-${alquiler.id}">
                     <input type="number" class="input-edit" value="${alquiler.ambientes}" id="ambientes-${alquiler.id}" />
                   </div>
@@ -102,7 +101,6 @@
                 <div>
                   <span>Precio:</span>
                   <span>${alquiler.precio}</span>
-                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
                   <div class="campo-edicion" id="campo-precio-${alquiler.id}">
                     <input type="number" class="input-edit" value="${alquiler.precio}" id="precio-${alquiler.id}" />
                   </div>
@@ -111,7 +109,6 @@
                 <div>
                   <span>Mascotas Permitidas:</span>
                   <span>${alquiler.mascotas}</span>
-                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
                   <div class="campo-edicion" id="campo-mascotas-${alquiler.id}">
                     <input type="text" class="input-edit" value="${alquiler.mascotas}" id="mascotas-${alquiler.id}" />
                   </div>
@@ -120,7 +117,6 @@
                 <div>
                   <span>WhatsApp:</span>
                   <span>${alquiler.whatsapp}</span>
-                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
                   <div class="campo-edicion" id="campo-whatsapp-${alquiler.id}">
                     <input type="text" class="input-edit" value="${alquiler.whatsapp}" id="whatsapp-${alquiler.id}" />
                   </div>
@@ -180,7 +176,7 @@
     }
 
     // Función para guardar los cambios realizados en un alquiler
-    function guardarCambios(id) {
+    async function guardarCambios(id) {
       const nuevaDireccion = document.getElementById(`direccion-${id}`).value;
       const nuevosAmbientes = document.getElementById(`ambientes-${id}`).value;
       const nuevoPrecio = document.getElementById(`precio-${id}`).value;
@@ -190,9 +186,17 @@
       console.log(`Guardando cambios para el alquiler con ID ${id}`);
       console.log(`Dirección: ${nuevaDireccion}, Ambientes: ${nuevosAmbientes}, Precio: ${nuevoPrecio}, Mascotas: ${nuevoMascotas}, WhatsApp: ${nuevoWhatsapp}`);
 
-      // Aquí deberías enviar estos datos a la API para actualizar el alquiler
-      // Ejemplo:
-      // fetch('https://mi-backend.com/actualizar-alquiler', { ... })
+      // Actualizamos la hoja de Google Sheets con los nuevos datos
+      const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=editarAlquiler&idAlquiler=${id}&direccion=${nuevaDireccion}&ambientes=${nuevosAmbientes}&precio=${nuevoPrecio}&mascotas=${nuevoMascotas}&whatsapp=${nuevoWhatsapp}`;
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error('Error al guardar los cambios');
+        }
+        alert('Cambios guardados exitosamente');
+      } catch (error) {
+        console.error('Error al guardar los cambios en Google Sheets:', error);
+      }
     }
 
     // Función para eliminar un alquiler
