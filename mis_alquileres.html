@@ -7,11 +7,13 @@
 </head>
 <body>
   <h1>Mis Alquileres</h1>
-  
+
+  <!-- Formulario para ingresar el ID del propietario -->
   <label for="idPropietario">ID Propietario:</label>
   <input type="text" id="idPropietario" name="idPropietario">
   <button onclick="cargarMisAlquileres()">Cargar Alquileres</button>
-  
+
+  <!-- Resultado que mostrará los alquileres -->
   <div id="resultado"></div>
 
   <script>
@@ -19,7 +21,11 @@
       const idPropietario = document.getElementById('idPropietario').value;
 
       try {
-        const response = await fetch(`https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`, {
+        // Usar un proxy para evitar problemas de CORS
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
+
+        const response = await fetch(proxyUrl + apiUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -32,6 +38,7 @@
 
         const data = await response.json();
 
+        // Mostrar los alquileres si la respuesta es válida
         if (data.error) {
           document.getElementById('resultado').innerHTML = data.error;
         } else {
@@ -47,6 +54,38 @@
         document.getElementById('resultado').innerHTML = 'Error al cargar los alquileres.';
       }
     }
+  </script>
+  
+  <!-- Aquí agregamos más funciones de tu código original sin eliminar las demás -->
+  <script>
+    async function obtenerAlquileres() {
+      // Ejemplo de función que obtiene alquileres, sin necesidad de CORS
+      try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=12345', {
+          method: 'GET',
+        });
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error('Error al obtener los alquileres:', error);
+      }
+    }
+    
+    async function registrarDueno(nombre, email, telefono) {
+      const ss = SpreadsheetApp.getActiveSpreadsheet();
+      const sheet = ss.getSheetByName('Propietarios');
+
+      const idUnico = new Date().getTime(); // Genera un ID único basado en la fecha y hora
+
+      const nuevaFila = sheet.getLastRow() + 1;
+      sheet.getRange(nuevaFila, 1).setValue(idUnico);
+      sheet.getRange(nuevaFila, 2).setValue(nombre);
+      sheet.getRange(nuevaFila, 3).setValue(email);
+      sheet.getRange(nuevaFila, 4).setValue(telefono);
+      return JSON.stringify({ id: idUnico });
+    }
+
+    // Otras funciones como "verificarInicioSesion", "agregarAlquiler", etc. se mantienen iguales
   </script>
 </body>
 </html>
