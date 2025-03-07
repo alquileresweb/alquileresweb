@@ -1,131 +1,165 @@
-const SHEET_ID = "TU_SHEET_ID"; // Reemplázalo con tu ID de Google Sheet
-const API_URL = `https://script.google.com/macros/s/TU_SCRIPT_ID/exec`; // Reemplázalo con el ID del script de Google Apps Script
-
-function cargarMisAlquileres() {
-    const propietarioID = document.getElementById("propietario-id").value;
-    if (!propietarioID) {
-        alert("Ingresa tu ID de propietario.");
-        return;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Alquileres</title>
+  <style>
+    .activo {
+      background-color: green;
+      color: white;
     }
 
-    fetch(`${API_URL}?accion=obtener&propietarioID=${propietarioID}`)
-        .then(response => response.json())
-        .then(data => {
-            const lista = document.getElementById("alquileres-lista");
-            lista.innerHTML = "";
+    .inactivo {
+      background-color: red;
+      color: white;
+    }
 
-            if (data.length === 0) {
-                lista.innerHTML = "<p>No se encontraron alquileres.</p>";
-                return;
-            }
+    .editar {
+      background-color: #007bff;
+      color: white;
+    }
 
-            data.forEach(alquiler => {
-                const alquilerItem = document.createElement("div");
-                alquilerItem.classList.add("alquiler-item");
+    .input-edit {
+      width: 120px;
+      margin-left: 5px;
+    }
 
-                let estadoColor = alquiler.estado === "Activo" ? "green" : "red";
-                let estadoTexto = alquiler.estado === "Activo" ? "Desactivar" : "Activar";
+    .alquiler-container {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
 
-                alquilerItem.innerHTML = `
-                    <p><strong>Dirección:</strong> <span class="dato">${alquiler.direccion}</span> <input type="text" class="editar-input" style="display:none;"></p>
-                    <p><strong>Ambientes:</strong> <span class="dato">${alquiler.ambientes}</span> <input type="text" class="editar-input" style="display:none;"></p>
-                    <p><strong>Precio:</strong> $<span class="dato">${alquiler.precio}</span> <input type="text" class="editar-input" style="display:none;"></p>
-                    <p><strong>Permite Mascotas:</strong> <span class="dato">${alquiler.permite_mascotas}</span> <input type="text" class="editar-input" style="display:none;"></p>
-                    <div class="botones">
-                        <button class="editar-btn" onclick="editarAlquiler(this)">Editar</button>
-                        <button class="guardar-btn" onclick="guardarCambios(this, '${alquiler.id}')" style="display:none;">Guardar Cambios</button>
-                        <button class="eliminar-btn" onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
-                        <button class="estado-btn" style="background-color: ${estadoColor}; color: white;" onclick="cambiarEstado('${alquiler.id}', this)">
-                            ${estadoTexto}
-                        </button>
-                    </div>
-                `;
-                lista.appendChild(alquilerItem);
-            });
-        })
-        .catch(error => console.error("Error al obtener alquileres:", error));
-}
+    .campo-edicion {
+      display: none;
+    }
 
-function editarAlquiler(btn) {
-    let alquilerItem = btn.closest(".alquiler-item");
-    let datos = alquilerItem.querySelectorAll(".dato");
-    let inputs = alquilerItem.querySelectorAll(".editar-input");
-    let guardarBtn = alquilerItem.querySelector(".guardar-btn");
+    .botones {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mis Alquileres</h1>
 
-    datos.forEach((dato, index) => {
-        inputs[index].value = dato.textContent;
-        dato.style.display = "none";
-        inputs[index].style.display = "inline-block";
-    });
+  <!-- Formulario para ingresar el ID del propietario -->
+  <label for="idPropietario">ID Propietario:</label>
+  <input type="text" id="idPropietario">
+  <button onclick="cargarMisAlquileres()">Cargar Alquileres</button>
 
-    btn.style.display = "none"; 
-    guardarBtn.style.display = "inline-block";
-}
+  <!-- Contenedor donde se mostrarán los alquileres -->
+  <div id="alquileres-lista"></div>
 
-function guardarCambios(btn, id) {
-    let alquilerItem = btn.closest(".alquiler-item");
-    let datos = alquilerItem.querySelectorAll(".dato");
-    let inputs = alquilerItem.querySelectorAll(".editar-input");
-    let editarBtn = alquilerItem.querySelector(".editar-btn");
+  <script>
+    async function cargarMisAlquileres() {
+      const idPropietario = document.getElementById('idPropietario').value;
+      const alquileresListaDiv = document.getElementById('alquileres-lista');
 
-    let nuevosDatos = {
-        id: id,
-        direccion: inputs[0].value,
-        ambientes: inputs[1].value,
-        precio: inputs[2].value,
-        permite_mascotas: inputs[3].value
-    };
+      try {
+        const apiUrl = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
 
-    fetch(`${API_URL}?accion=editar`, {
-        method: "POST",
-        body: JSON.stringify(nuevosDatos),
-        headers: { "Content-Type": "application/json" }
-    })
-    .then(response => response.json())
-    .then(response => {
-        if (response.success) {
-            datos.forEach((dato, index) => {
-                dato.textContent = inputs[index].value;
-                dato.style.display = "inline";
-                inputs[index].style.display = "none";
-            });
-
-            btn.style.display = "none";
-            editarBtn.style.display = "inline-block";
+        if (data.length === 0) {
+          alquileresListaDiv.innerHTML = '<p>No se encontraron alquileres.</p>';
         } else {
-            alert("Error al actualizar el alquiler.");
+          let alquileresHtml = '';
+          data.forEach(alquiler => {
+            alquileresHtml += `
+              <div class="alquiler-container" id="alquiler-${alquiler.id}">
+                <h3>Alquiler en: ${alquiler.direccion}</h3>
+
+                <div>
+                  <span>Dirección:</span>
+                  <span>${alquiler.direccion}</span>
+                  <input type="text" class="input-edit campo-edicion" value="${alquiler.direccion}" id="direccion-${alquiler.id}" />
+                </div>
+
+                <div>
+                  <span>Ambientes:</span>
+                  <span>${alquiler.ambientes}</span>
+                  <input type="number" class="input-edit campo-edicion" value="${alquiler.ambientes}" id="ambientes-${alquiler.id}" />
+                </div>
+
+                <div>
+                  <span>Precio:</span>
+                  <span>${alquiler.precio}</span>
+                  <input type="number" class="input-edit campo-edicion" value="${alquiler.precio}" id="precio-${alquiler.id}" />
+                </div>
+
+                <div>
+                  <span>Mascotas:</span>
+                  <span>${alquiler.mascotas}</span>
+                  <input type="text" class="input-edit campo-edicion" value="${alquiler.mascotas}" id="mascotas-${alquiler.id}" />
+                </div>
+
+                <div class="botones">
+                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
+                  <button class="${alquiler.estado === 'Activo' ? 'activo' : 'inactivo'}"
+                          id="estado-btn-${alquiler.id}"
+                          onclick="cambiarEstadoAlquiler('${alquiler.id}')">
+                    ${alquiler.estado === 'Activo' ? 'Desactivar' : 'Activar'}
+                  </button>
+                  <button onclick="guardarCambios('${alquiler.id}')">Guardar Cambios</button>
+                  <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
+                </div>
+              </div>
+            `;
+          });
+          alquileresListaDiv.innerHTML = alquileresHtml;
         }
-    })
-    .catch(error => console.error("Error al guardar cambios:", error));
-}
+      } catch (error) {
+        alquileresListaDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+      }
+    }
 
-function eliminarAlquiler(id) {
-    if (!confirm("¿Seguro que quieres eliminar este alquiler?")) return;
+    async function cambiarEstadoAlquiler(id) {
+      const estadoBtn = document.getElementById(`estado-btn-${id}`);
+      const nuevoEstado = estadoBtn.textContent === 'Desactivar' ? 'Inactivo' : 'Activo';
 
-    fetch(`${API_URL}?accion=eliminar&id=${id}`)
-        .then(response => response.json())
-        .then(response => {
-            if (response.success) {
-                cargarMisAlquileres();
-            } else {
-                alert("Error al eliminar el alquiler.");
-            }
-        })
-        .catch(error => console.error("Error al eliminar alquiler:", error));
-}
+      estadoBtn.textContent = nuevoEstado === 'Activo' ? 'Desactivar' : 'Activar';
+      estadoBtn.className = nuevoEstado === 'Activo' ? 'activo' : 'inactivo';
 
-function cambiarEstado(id, btn) {
-    let nuevoEstado = btn.textContent === "Desactivar" ? "Inactivo" : "Activo";
+      try {
+        const apiUrl = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=cambiarEstado&idAlquiler=${id}&nuevoEstado=${nuevoEstado}`;
+        await fetch(apiUrl);
+      } catch (error) {
+        console.error('Error al cambiar el estado:', error);
+      }
+    }
 
-    fetch(`${API_URL}?accion=cambiarEstado&id=${id}&estado=${nuevoEstado}`)
-        .then(response => response.json())
-        .then(response => {
-            if (response.success) {
-                btn.textContent = nuevoEstado === "Activo" ? "Desactivar" : "Activar";
-                btn.style.backgroundColor = nuevoEstado === "Activo" ? "green" : "red";
-            } else {
-                alert("Error al cambiar estado.");
-            }
-        })
-        .catch(error => console.error("Error al cambiar estado:", error));
-}
+    function editarAlquiler(id) {
+      document.querySelectorAll(`#direccion-${id}, #ambientes-${id}, #precio-${id}, #mascotas-${id}`)
+        .forEach(input => input.classList.toggle('campo-edicion'));
+    }
+
+    async function guardarCambios(id) {
+      const nuevaDireccion = document.getElementById(`direccion-${id}`).value;
+      const nuevosAmbientes = document.getElementById(`ambientes-${id}`).value;
+      const nuevoPrecio = document.getElementById(`precio-${id}`).value;
+      const nuevoMascotas = document.getElementById(`mascotas-${id}`).value;
+
+      try {
+        const apiUrl = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=editarAlquiler&idAlquiler=${id}&direccion=${nuevaDireccion}&ambientes=${nuevosAmbientes}&precio=${nuevoPrecio}&mascotas=${nuevoMascotas}`;
+        await fetch(apiUrl);
+        alert('Cambios guardados correctamente');
+      } catch (error) {
+        console.error('Error al guardar los cambios:', error);
+      }
+    }
+
+    async function eliminarAlquiler(id) {
+      if (!confirm('¿Estás seguro de eliminar este alquiler?')) return;
+
+      try {
+        const apiUrl = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=eliminarAlquiler&idAlquiler=${id}`;
+        await fetch(apiUrl);
+        document.getElementById(`alquiler-${id}`).remove();
+      } catch (error) {
+        console.error('Error al eliminar el alquiler:', error);
+      }
+    }
+  </script>
+</body>
+</html>
