@@ -22,9 +22,9 @@
       const resultadoDiv = document.getElementById('resultado');
       
       try {
-        // Usar un proxy para evitar problemas de CORS
-        const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // Solicitar acceso al servicio de proxy si aún no lo has hecho
-        const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
+        // Usar el proxy local para evitar problemas de CORS
+        const proxyUrl = 'http://localhost:5000/proxy/'; // Tu proxy local
+        const apiUrl = `script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
         
         const fullUrl = `${proxyUrl}${apiUrl}`;
 
@@ -46,7 +46,7 @@
         } else {
           let alquileresHtml = '<ul>';
           data.forEach(alquiler => {
-            alquileresHtml += `
+            alquileresHtml += ` 
               <li>
                 Dirección: ${alquiler.direccion} <br>
                 Ambientes: ${alquiler.ambientes} <br>
