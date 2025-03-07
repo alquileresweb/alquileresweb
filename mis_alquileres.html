@@ -28,7 +28,7 @@
       }
 
       try {
-        const proxyUrl = 'http://localhost:5000/proxy/'; // Asegúrate de que no tenga https://
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // Proxy alternativo
         const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
         
         const fullUrl = proxyUrl + encodeURIComponent(apiUrl); // Concatenamos y codificamos la URL
