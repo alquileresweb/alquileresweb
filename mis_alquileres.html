@@ -13,13 +13,13 @@
   <input type="text" id="idPropietario" name="idPropietario">
   <button onclick="cargarMisAlquileres()">Cargar Alquileres</button>
 
-  <!-- Resultado que mostrará los alquileres -->
-  <div id="resultado"></div>
+  <!-- Contenedor donde se mostrarán los alquileres -->
+  <div id="alquileres-lista"></div>
 
   <script>
     async function cargarMisAlquileres() {
       const idPropietario = document.getElementById('idPropietario').value;
-      const resultadoDiv = document.getElementById('resultado');
+      const alquileresListaDiv = document.getElementById('alquileres-lista');
       
       try {
         // Usar el nuevo proxy All Origins
@@ -44,7 +44,7 @@
         const data = await response.json();
 
         if (data.length === 0) {
-          resultadoDiv.innerHTML = '<p>No se encontraron alquileres.</p>';
+          alquileresListaDiv.innerHTML = '<p>No se encontraron alquileres.</p>';
         } else {
           let alquileresHtml = '<ul>';
           data.forEach(alquiler => {
@@ -59,11 +59,11 @@
             `;
           });
           alquileresHtml += '</ul>';
-          resultadoDiv.innerHTML = alquileresHtml;
+          alquileresListaDiv.innerHTML = alquileresHtml;
         }
       } catch (error) {
         console.error('Error al obtener los alquileres:', error);
-        resultadoDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+        alquileresListaDiv.innerHTML = `<p>Error: ${error.message}</p>`;
       }
     }
   </script>
