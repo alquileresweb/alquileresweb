@@ -20,15 +20,18 @@
     async function cargarMisAlquileres() {
       const idPropietario = document.getElementById('idPropietario').value;
       const resultadoDiv = document.getElementById('resultado');
-      
+
+      // Verifica si se ha ingresado un ID válido
+      if (!idPropietario) {
+        resultadoDiv.innerHTML = '<p>Por favor ingrese un ID de propietario.</p>';
+        return;
+      }
+
       try {
-        // Usar un proxy para evitar problemas de CORS
         const proxyUrl = 'http://localhost:5000/proxy/'; // Asegúrate de que no tenga https://
         const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
         
-        const fullUrl = proxyUrl + encodeURIComponent(apiUrl); // Concatenamos y codificamos la URL para evitar problemas con caracteres especiales
-
-        console.log(`Solicitando datos desde: ${fullUrl}`); // Log de la URL solicitada
+        const fullUrl = proxyUrl + encodeURIComponent(apiUrl); // Concatenamos y codificamos la URL
 
         const response = await fetch(fullUrl, {
           method: 'GET',
@@ -43,8 +46,8 @@
 
         const data = await response.json();
 
-        if (data.length === 0) {
-          resultadoDiv.innerHTML = '<p>No se encontraron alquileres.</p>';
+        if (data[0] && data[0].error) {
+          resultadoDiv.innerHTML = `<p>${data[0].error}</p>`;
         } else {
           let alquileresHtml = '<ul>';
           data.forEach(alquiler => {
