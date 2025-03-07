@@ -26,10 +26,12 @@
         const proxyUrl = 'http://localhost:5000/proxy/'; // Tu servidor proxy local
         const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
         
+        // Concatenamos la URL completa
         const fullUrl = `${proxyUrl}${apiUrl}`;
 
         console.log(`Solicitando datos desde: ${fullUrl}`); // Log de la URL solicitada
 
+        // Realizamos la solicitud al proxy
         const response = await fetch(fullUrl, {
           method: 'GET',
           headers: {
@@ -37,15 +39,19 @@
           }
         });
 
+        // Verificamos si la respuesta es exitosa
         if (!response.ok) {
           throw new Error('Error al obtener los alquileres');
         }
 
+        // Convertimos la respuesta a formato JSON
         const data = await response.json();
 
+        // Si no se encontraron alquileres, mostramos un mensaje
         if (data.length === 0) {
           resultadoDiv.innerHTML = '<p>No se encontraron alquileres.</p>';
         } else {
+          // Si hay alquileres, mostramos la lista
           let alquileresHtml = '<ul>';
           data.forEach(alquiler => {
             alquileresHtml += ` 
@@ -62,6 +68,7 @@
           resultadoDiv.innerHTML = alquileresHtml;
         }
       } catch (error) {
+        // Si hay un error, lo mostramos en el resultado
         console.error('Error al obtener los alquileres:', error);
         resultadoDiv.innerHTML = `<p>Error: ${error.message}</p>`;
       }
