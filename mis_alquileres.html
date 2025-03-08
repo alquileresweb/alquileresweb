@@ -83,7 +83,7 @@
 
                 <div>
                   <span>Dirección:</span>
-                  <span>${alquiler.direccion}</span>
+                  <span id="direccion-text-${alquiler.id}">${alquiler.direccion}</span>
                   <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
                   <div class="campo-edicion" id="campo-direccion-${alquiler.id}">
                     <input type="text" class="input-edit" value="${alquiler.direccion}" id="direccion-${alquiler.id}" />
@@ -92,7 +92,7 @@
 
                 <div>
                   <span>Ambientes:</span>
-                  <span>${alquiler.ambientes}</span>
+                  <span id="ambientes-text-${alquiler.id}">${alquiler.ambientes}</span>
                   <div class="campo-edicion" id="campo-ambientes-${alquiler.id}">
                     <input type="number" class="input-edit" value="${alquiler.ambientes}" id="ambientes-${alquiler.id}" />
                   </div>
@@ -100,7 +100,7 @@
 
                 <div>
                   <span>Precio:</span>
-                  <span>${alquiler.precio}</span>
+                  <span id="precio-text-${alquiler.id}">${alquiler.precio}</span>
                   <div class="campo-edicion" id="campo-precio-${alquiler.id}">
                     <input type="number" class="input-edit" value="${alquiler.precio}" id="precio-${alquiler.id}" />
                   </div>
@@ -108,7 +108,7 @@
 
                 <div>
                   <span>Mascotas Permitidas:</span>
-                  <span>${alquiler.mascotas}</span>
+                  <span id="mascotas-text-${alquiler.id}">${alquiler.mascotas}</span>
                   <div class="campo-edicion" id="campo-mascotas-${alquiler.id}">
                     <input type="text" class="input-edit" value="${alquiler.mascotas}" id="mascotas-${alquiler.id}" />
                   </div>
@@ -116,7 +116,7 @@
 
                 <div>
                   <span>WhatsApp:</span>
-                  <span>${alquiler.whatsapp}</span>
+                  <span id="whatsapp-text-${alquiler.id}">${alquiler.whatsapp}</span>
                   <div class="campo-edicion" id="campo-whatsapp-${alquiler.id}">
                     <input type="text" class="input-edit" value="${alquiler.whatsapp}" id="whatsapp-${alquiler.id}" />
                   </div>
@@ -128,7 +128,6 @@
                 </button>
 
                 <button onclick="guardarCambios('${alquiler.id}')">Guardar Cambios</button>
-                <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
               </div>`;
           });
           alquileresListaDiv.innerHTML = alquileresHtml;
@@ -172,6 +171,13 @@
     function editarAlquiler(id) {
       const camposEdicion = document.querySelectorAll(`#campo-direccion-${id}, #campo-ambientes-${id}, #campo-precio-${id}, #campo-mascotas-${id}, #campo-whatsapp-${id}`);
       camposEdicion.forEach(campo => campo.style.display = 'inline-block');
+
+      // Ocultar los elementos de texto para editar
+      document.getElementById(`direccion-text-${id}`).style.display = 'none';
+      document.getElementById(`ambientes-text-${id}`).style.display = 'none';
+      document.getElementById(`precio-text-${id}`).style.display = 'none';
+      document.getElementById(`mascotas-text-${id}`).style.display = 'none';
+      document.getElementById(`whatsapp-text-${id}`).style.display = 'none';
     }
 
     // Función para guardar los cambios realizados en un alquiler
@@ -193,28 +199,28 @@
           throw new Error('Error al guardar los cambios');
         }
         alert('Cambios guardados exitosamente');
+
+        // Volver a mostrar los valores editados
+        document.getElementById(`direccion-text-${id}`).innerText = nuevaDireccion;
+        document.getElementById(`ambientes-text-${id}`).innerText = nuevosAmbientes;
+        document.getElementById(`precio-text-${id}`).innerText = nuevoPrecio;
+        document.getElementById(`mascotas-text-${id}`).innerText = nuevoMascotas;
+        document.getElementById(`whatsapp-text-${id}`).innerText = nuevoWhatsapp;
+
+        // Ocultar los campos de edición
+        const camposEdicion = document.querySelectorAll(`#campo-direccion-${id}, #campo-ambientes-${id}, #campo-precio-${id}, #campo-mascotas-${id}, #campo-whatsapp-${id}`);
+        camposEdicion.forEach(campo => campo.style.display = 'none');
+
+        // Mostrar nuevamente los elementos de texto
+        document.getElementById(`direccion-text-${id}`).style.display = 'inline';
+        document.getElementById(`ambientes-text-${id}`).style.display = 'inline';
+        document.getElementById(`precio-text-${id}`).style.display = 'inline';
+        document.getElementById(`mascotas-text-${id}`).style.display = 'inline';
+        document.getElementById(`whatsapp-text-${id}`).style.display = 'inline';
+
       } catch (error) {
-        console.error('Error al guardar los cambios en Google Sheets:', error);
-      }
-    }
-
-    // Función para eliminar un alquiler
-    async function eliminarAlquiler(id) {
-      if (confirm('¿Estás seguro de que deseas eliminar este alquiler?')) {
-        console.log(`Eliminando alquiler con ID ${id}`);
-
-        // Llama a la API para eliminar el alquiler
-        const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=eliminarAlquiler&idAlquiler=${id}`;
-        try {
-          const response = await fetch(apiUrl);
-          if (!response.ok) {
-            throw new Error('Error al eliminar el alquiler');
-          }
-          document.getElementById(`alquiler-${id}`).remove();
-          alert('Alquiler eliminado exitosamente');
-        } catch (error) {
-          console.error('Error al eliminar el alquiler:', error);
-        }
+        console.error('Error al guardar los cambios:', error);
+        alert('Error al guardar los cambios');
       }
     }
   </script>
