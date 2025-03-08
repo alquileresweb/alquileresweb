@@ -211,7 +211,7 @@
             throw new Error('Error al eliminar el alquiler');
           }
           alert('Alquiler eliminado exitosamente');
-          cargarMisAlquileres(); // Recargar la lista de alquileres
+          cargarMisAlquileres(); // Recargar los alquileres después de eliminar
         } catch (error) {
           console.error('Error al eliminar el alquiler en Google Sheets:', error);
         }
