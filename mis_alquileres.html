@@ -199,13 +199,22 @@
     }
 
     // Función para eliminar un alquiler
-    function eliminarAlquiler(id) {
+    async function eliminarAlquiler(id) {
       if (confirm('¿Estás seguro de que deseas eliminar este alquiler?')) {
         console.log(`Eliminando alquiler con ID ${id}`);
 
         // Llama a la API para eliminar el alquiler
-        // Ejemplo:
-        // fetch('https://mi-backend.com/eliminar-alquiler', { ... })
+        const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=eliminarAlquiler&idAlquiler=${id}`;
+        try {
+          const response = await fetch(apiUrl);
+          if (!response.ok) {
+            throw new Error('Error al eliminar el alquiler');
+          }
+          alert('Alquiler eliminado exitosamente');
+          cargarMisAlquileres(); // Recargar la lista de alquileres
+        } catch (error) {
+          console.error('Error al eliminar el alquiler en Google Sheets:', error);
+        }
       }
     }
   </script>
