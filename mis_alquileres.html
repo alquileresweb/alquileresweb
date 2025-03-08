@@ -36,95 +36,177 @@
 </head>
 <body>
   <h1>Mis Alquileres</h1>
+
+  <!-- Formulario para ingresar el ID del propietario -->
   <label for="idPropietario">ID Propietario:</label>
   <input type="text" id="idPropietario" name="idPropietario">
   <button onclick="cargarMisAlquileres()">Cargar Alquileres</button>
+
+  <!-- Contenedor donde se mostrarán los alquileres -->
   <div id="alquileres-lista"></div>
-  
+
   <script>
     async function cargarMisAlquileres() {
       const idPropietario = document.getElementById('idPropietario').value;
       const alquileresListaDiv = document.getElementById('alquileres-lista');
       
       try {
-        const apiUrl = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error('Error al obtener los alquileres');
+        // Usar el nuevo proxy All Origins
+        const proxyUrl = 'https://api.allorigins.win/raw?url=';
+        const apiUrl = https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario};
+        
+        const fullUrl = proxyUrl + encodeURIComponent(apiUrl); // Concatenamos y codificamos la URL para evitar problemas con caracteres especiales
+
+        console.log(Solicitando datos desde: ${fullUrl}); // Log de la URL solicitada
+
+        const response = await fetch(fullUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al obtener los alquileres');
+        }
+
         const data = await response.json();
 
         if (data.length === 0) {
           alquileresListaDiv.innerHTML = '<p>No se encontraron alquileres.</p>';
-          return;
+        } else {
+          let alquileresHtml = '';
+          data.forEach(alquiler => {
+            alquileresHtml += 
+              <div class="alquiler-container" id="alquiler-${alquiler.id}">
+                <h3>Alquiler en: ${alquiler.direccion}</h3>
+
+                <div>
+                  <span>Dirección:</span>
+                  <span>${alquiler.direccion}</span>
+                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
+                  <div class="campo-edicion" id="campo-direccion-${alquiler.id}">
+                    <input type="text" class="input-edit" value="${alquiler.direccion}" id="direccion-${alquiler.id}" />
+                  </div>
+                </div>
+
+                <div>
+                  <span>Ambientes:</span>
+                  <span>${alquiler.ambientes}</span>
+                  <div class="campo-edicion" id="campo-ambientes-${alquiler.id}">
+                    <input type="number" class="input-edit" value="${alquiler.ambientes}" id="ambientes-${alquiler.id}" />
+                  </div>
+                </div>
+
+                <div>
+                  <span>Precio:</span>
+                  <span>${alquiler.precio}</span>
+                  <div class="campo-edicion" id="campo-precio-${alquiler.id}">
+                    <input type="number" class="input-edit" value="${alquiler.precio}" id="precio-${alquiler.id}" />
+                  </div>
+                </div>
+
+                <div>
+                  <span>Mascotas Permitidas:</span>
+                  <span>${alquiler.mascotas}</span>
+                  <div class="campo-edicion" id="campo-mascotas-${alquiler.id}">
+                    <input type="text" class="input-edit" value="${alquiler.mascotas}" id="mascotas-${alquiler.id}" />
+                  </div>
+                </div>
+
+                <div>
+                  <span>WhatsApp:</span>
+                  <span>${alquiler.whatsapp}</span>
+                  <div class="campo-edicion" id="campo-whatsapp-${alquiler.id}">
+                    <input type="text" class="input-edit" value="${alquiler.whatsapp}" id="whatsapp-${alquiler.id}" />
+                  </div>
+                </div>
+
+                <button class="${alquiler.estado === 'Activo' ? 'activo' : 'inactivo'}" 
+                        onclick="cambiarEstadoAlquiler('${alquiler.id}', '${alquiler.estado}')">
+                  ${alquiler.estado === 'Activo' ? 'Desactivar' : 'Activar'}
+                </button>
+
+                <button onclick="guardarCambios('${alquiler.id}')">Guardar Cambios</button>
+                <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
+              </div>
+            ;
+          });
+          alquileresListaDiv.innerHTML = alquileresHtml;
         }
-
-        let alquileresHtml = '';
-        data.forEach(alquiler => {
-          const estadoClase = alquiler.estado === 'Activo' ? 'activo' : 'inactivo';
-          const estadoTexto = alquiler.estado === 'Activo' ? 'Desactivar' : 'Activar';
-          
-          alquileresHtml += `
-            <div class="alquiler-container" id="alquiler-${alquiler.id}">
-              <h3>Alquiler en: ${alquiler.direccion}</h3>
-              <div><span>Dirección:</span> <span>${alquiler.direccion}</span></div>
-              <div><span>Ambientes:</span> <span>${alquiler.ambientes}</span></div>
-              <div><span>Precio:</span> <span>${alquiler.precio}</span></div>
-              <div><span>Mascotas Permitidas:</span> <span>${alquiler.mascotas}</span></div>
-              <div><span>WhatsApp:</span> <span>${alquiler.whatsapp}</span></div>
-              <button class="${estadoClase}" id="estado-${alquiler.id}" onclick="cambiarEstadoAlquiler('${alquiler.id}')">${estadoTexto}</button>
-              <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
-              <button onclick="guardarCambios('${alquiler.id}')">Guardar Cambios</button>
-              <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
-            </div>
-          `;
-        });
-        alquileresListaDiv.innerHTML = alquileresHtml;
       } catch (error) {
-        alquileresListaDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+        console.error('Error al obtener los alquileres:', error);
+        alquileresListaDiv.innerHTML = <p>Error: ${error.message}</p>;
       }
     }
 
-    async function cambiarEstadoAlquiler(id) {
-      const botonEstado = document.getElementById(`estado-${id}`);
-      const nuevoEstado = botonEstado.textContent === 'Activar' ? 'Activo' : 'Inactivo';
-      
+    // Función para activar o desactivar un alquiler
+    async function cambiarEstadoAlquiler(id, estado) {
+      const nuevoEstado = estado === 'Activo' ? 'Inactivo' : 'Activo';
+      console.log(Cambiando estado del alquiler con ID ${id} a ${nuevoEstado});
+
+      // Cambiar el color del botón
+      const botonEstado = document.querySelector(button[onclick="cambiarEstadoAlquiler('${id}', '${estado}')"]);
+      if (nuevoEstado === 'Activo') {
+        botonEstado.classList.remove('inactivo');
+        botonEstado.classList.add('activo');
+        botonEstado.textContent = 'Desactivar';
+      } else {
+        botonEstado.classList.remove('activo');
+        botonEstado.classList.add('inactivo');
+        botonEstado.textContent = 'Activar';
+      }
+
+      // Aquí actualizamos la columna E en Google Sheets
+      const apiUrl = https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=cambiarEstado&idAlquiler=${id}&nuevoEstado=${nuevoEstado};
       try {
-        const apiUrl = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=cambiarEstado&idAlquiler=${id}&nuevoEstado=${nuevoEstado}`;
         const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error('Error al cambiar el estado');
-        
-        botonEstado.textContent = nuevoEstado === 'Activo' ? 'Desactivar' : 'Activar';
-        botonEstado.className = nuevoEstado === 'Activo' ? 'activo' : 'inactivo';
+        if (!response.ok) {
+          throw new Error('Error al cambiar el estado');
+        }
       } catch (error) {
-        console.error('Error al cambiar el estado:', error);
+        console.error('Error al cambiar el estado en Google Sheets:', error);
       }
     }
 
+    // Función para editar un alquiler
     function editarAlquiler(id) {
-      document.querySelectorAll(`#campo-direccion-${id}, #campo-ambientes-${id}, #campo-precio-${id}, #campo-mascotas-${id}, #campo-whatsapp-${id}`).forEach(campo => {
-        campo.style.display = 'inline-block';
-      });
+      const camposEdicion = document.querySelectorAll(#campo-direccion-${id}, #campo-ambientes-${id}, #campo-precio-${id}, #campo-mascotas-${id}, #campo-whatsapp-${id});
+      camposEdicion.forEach(campo => campo.style.display = 'inline-block');
     }
 
+    // Función para guardar los cambios realizados en un alquiler
     async function guardarCambios(id) {
-      const nuevaDireccion = document.getElementById(`direccion-${id}`).value;
-      const nuevosAmbientes = document.getElementById(`ambientes-${id}`).value;
-      const nuevoPrecio = document.getElementById(`precio-${id}`).value;
-      const nuevoMascotas = document.getElementById(`mascotas-${id}`).value;
-      const nuevoWhatsapp = document.getElementById(`whatsapp-${id}`).value;
-      
+      const nuevaDireccion = document.getElementById(direccion-${id}).value;
+      const nuevosAmbientes = document.getElementById(ambientes-${id}).value;
+      const nuevoPrecio = document.getElementById(precio-${id}).value;
+      const nuevoMascotas = document.getElementById(mascotas-${id}).value;
+      const nuevoWhatsapp = document.getElementById(whatsapp-${id}).value;
+
+      console.log(Guardando cambios para el alquiler con ID ${id});
+      console.log(Dirección: ${nuevaDireccion}, Ambientes: ${nuevosAmbientes}, Precio: ${nuevoPrecio}, Mascotas: ${nuevoMascotas}, WhatsApp: ${nuevoWhatsapp});
+
+      // Actualizamos la hoja de Google Sheets con los nuevos datos
+      const apiUrl = https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=editarAlquiler&idAlquiler=${id}&direccion=${nuevaDireccion}&ambientes=${nuevosAmbientes}&precio=${nuevoPrecio}&mascotas=${nuevoMascotas}&whatsapp=${nuevoWhatsapp};
       try {
-        const apiUrl = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=editarAlquiler&idAlquiler=${id}&direccion=${nuevaDireccion}&ambientes=${nuevosAmbientes}&precio=${nuevoPrecio}&mascotas=${nuevoMascotas}&whatsapp=${nuevoWhatsapp}`;
         const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error('Error al guardar los cambios');
+        if (!response.ok) {
+          throw new Error('Error al guardar los cambios');
+        }
         alert('Cambios guardados exitosamente');
       } catch (error) {
-        console.error('Error al guardar los cambios:', error);
+        console.error('Error al guardar los cambios en Google Sheets:', error);
       }
     }
 
+    // Función para eliminar un alquiler
     function eliminarAlquiler(id) {
-      if (confirm('¿Estás seguro de que deseas eliminar este alquiler?')) {
-        console.log(`Eliminando alquiler con ID ${id}`);
+      if (confirm(¿Estás seguro de que deseas eliminar este alquiler?)) {
+        console.log(Eliminando alquiler con ID ${id});
+
+        // Llama a la API para eliminar el alquiler
+        // Ejemplo:
+        // fetch('https://mi-backend.com/eliminar-alquiler', { ... })
       }
     }
   </script>
