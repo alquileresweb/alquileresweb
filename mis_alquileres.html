@@ -53,11 +53,11 @@
       try {
         // Usar el nuevo proxy All Origins
         const proxyUrl = 'https://api.allorigins.win/raw?url=';
-        const apiUrl = https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario};
+        const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
         
         const fullUrl = proxyUrl + encodeURIComponent(apiUrl); // Concatenamos y codificamos la URL para evitar problemas con caracteres especiales
 
-        console.log(Solicitando datos desde: ${fullUrl}); // Log de la URL solicitada
+        console.log(`Solicitando datos desde: ${fullUrl}`); // Log de la URL solicitada
 
         const response = await fetch(fullUrl, {
           method: 'GET',
@@ -77,7 +77,7 @@
         } else {
           let alquileresHtml = '';
           data.forEach(alquiler => {
-            alquileresHtml += 
+            alquileresHtml += `
               <div class="alquiler-container" id="alquiler-${alquiler.id}">
                 <h3>Alquiler en: ${alquiler.direccion}</h3>
 
@@ -130,23 +130,23 @@
                 <button onclick="guardarCambios('${alquiler.id}')">Guardar Cambios</button>
                 <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
               </div>
-            ;
+            `;
           });
           alquileresListaDiv.innerHTML = alquileresHtml;
         }
       } catch (error) {
         console.error('Error al obtener los alquileres:', error);
-        alquileresListaDiv.innerHTML = <p>Error: ${error.message}</p>;
+        alquileresListaDiv.innerHTML = `<p>Error: ${error.message}</p>`;
       }
     }
 
     // Función para activar o desactivar un alquiler
     async function cambiarEstadoAlquiler(id, estado) {
       const nuevoEstado = estado === 'Activo' ? 'Inactivo' : 'Activo';
-      console.log(Cambiando estado del alquiler con ID ${id} a ${nuevoEstado});
+      console.log(`Cambiando estado del alquiler con ID ${id} a ${nuevoEstado}`);
 
       // Cambiar el color del botón
-      const botonEstado = document.querySelector(button[onclick="cambiarEstadoAlquiler('${id}', '${estado}')"]);
+      const botonEstado = document.querySelector(`button[onclick="cambiarEstadoAlquiler('${id}', '${estado}')"]`);
       if (nuevoEstado === 'Activo') {
         botonEstado.classList.remove('inactivo');
         botonEstado.classList.add('activo');
@@ -158,7 +158,7 @@
       }
 
       // Aquí actualizamos la columna E en Google Sheets
-      const apiUrl = https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=cambiarEstado&idAlquiler=${id}&nuevoEstado=${nuevoEstado};
+      const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=cambiarEstado&idAlquiler=${id}&nuevoEstado=${nuevoEstado}`;
       try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
@@ -171,23 +171,23 @@
 
     // Función para editar un alquiler
     function editarAlquiler(id) {
-      const camposEdicion = document.querySelectorAll(#campo-direccion-${id}, #campo-ambientes-${id}, #campo-precio-${id}, #campo-mascotas-${id}, #campo-whatsapp-${id});
+      const camposEdicion = document.querySelectorAll(`#campo-direccion-${id}, #campo-ambientes-${id}, #campo-precio-${id}, #campo-mascotas-${id}, #campo-whatsapp-${id}`);
       camposEdicion.forEach(campo => campo.style.display = 'inline-block');
     }
 
     // Función para guardar los cambios realizados en un alquiler
     async function guardarCambios(id) {
-      const nuevaDireccion = document.getElementById(direccion-${id}).value;
-      const nuevosAmbientes = document.getElementById(ambientes-${id}).value;
-      const nuevoPrecio = document.getElementById(precio-${id}).value;
-      const nuevoMascotas = document.getElementById(mascotas-${id}).value;
-      const nuevoWhatsapp = document.getElementById(whatsapp-${id}).value;
+      const nuevaDireccion = document.getElementById(`direccion-${id}`).value;
+      const nuevosAmbientes = document.getElementById(`ambientes-${id}`).value;
+      const nuevoPrecio = document.getElementById(`precio-${id}`).value;
+      const nuevoMascotas = document.getElementById(`mascotas-${id}`).value;
+      const nuevoWhatsapp = document.getElementById(`whatsapp-${id}`).value;
 
-      console.log(Guardando cambios para el alquiler con ID ${id});
-      console.log(Dirección: ${nuevaDireccion}, Ambientes: ${nuevosAmbientes}, Precio: ${nuevoPrecio}, Mascotas: ${nuevoMascotas}, WhatsApp: ${nuevoWhatsapp});
+      console.log(`Guardando cambios para el alquiler con ID ${id}`);
+      console.log(`Dirección: ${nuevaDireccion}, Ambientes: ${nuevosAmbientes}, Precio: ${nuevoPrecio}, Mascotas: ${nuevoMascotas}, WhatsApp: ${nuevoWhatsapp}`);
 
       // Actualizamos la hoja de Google Sheets con los nuevos datos
-      const apiUrl = https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=editarAlquiler&idAlquiler=${id}&direccion=${nuevaDireccion}&ambientes=${nuevosAmbientes}&precio=${nuevoPrecio}&mascotas=${nuevoMascotas}&whatsapp=${nuevoWhatsapp};
+      const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=editarAlquiler&idAlquiler=${id}&direccion=${nuevaDireccion}&ambientes=${nuevosAmbientes}&precio=${nuevoPrecio}&mascotas=${nuevoMascotas}&whatsapp=${nuevoWhatsapp}`;
       try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
@@ -201,8 +201,8 @@
 
     // Función para eliminar un alquiler
     function eliminarAlquiler(id) {
-      if (confirm(¿Estás seguro de que deseas eliminar este alquiler?)) {
-        console.log(Eliminando alquiler con ID ${id});
+      if (confirm(`¿Estás seguro de que deseas eliminar este alquiler?`)) {
+        console.log(`Eliminando alquiler con ID ${id}`);
 
         // Llama a la API para eliminar el alquiler
         // Ejemplo:
