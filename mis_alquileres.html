@@ -77,8 +77,8 @@
         } else {
           let alquileresHtml = '';
           data.forEach(alquiler => {
-            alquileresHtml += 
-              `<div class="alquiler-container" id="alquiler-${alquiler.id}">
+            alquileresHtml += `
+              <div class="alquiler-container" id="alquiler-${alquiler.id}">
                 <h3>Alquiler en: ${alquiler.direccion}</h3>
 
                 <div>
@@ -210,10 +210,10 @@
           if (!response.ok) {
             throw new Error('Error al eliminar el alquiler');
           }
+          document.getElementById(`alquiler-${id}`).remove();
           alert('Alquiler eliminado exitosamente');
-          cargarMisAlquileres(); // Recargar los alquileres después de eliminar
         } catch (error) {
-          console.error('Error al eliminar el alquiler en Google Sheets:', error);
+          console.error('Error al eliminar el alquiler:', error);
         }
       }
     }
