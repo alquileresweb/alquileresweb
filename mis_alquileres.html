@@ -32,11 +32,6 @@
     .campo-edicion {
       display: none;
     }
-
-    .botones-container {
-      display: flex;
-      gap: 10px;
-    }
   </style>
 </head>
 <body>
@@ -82,21 +77,16 @@
         } else {
           let alquileresHtml = '';
           data.forEach(alquiler => {
-            alquileresHtml += `
-              <div class="alquiler-container" id="alquiler-${alquiler.id}">
+            alquileresHtml += 
+              `<div class="alquiler-container" id="alquiler-${alquiler.id}">
                 <h3>Alquiler en: ${alquiler.direccion}</h3>
 
                 <div>
                   <span>Dirección:</span>
                   <span>${alquiler.direccion}</span>
-                  <div class="botones-container">
-                    <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
-                    <button class="${alquiler.estado === 'Activo' ? 'activo' : 'inactivo'}" 
-                            onclick="cambiarEstadoAlquiler('${alquiler.id}', '${alquiler.estado}')">
-                      ${alquiler.estado === 'Activo' ? 'Desactivar' : 'Activar'}
-                    </button>
-                    <button onclick="guardarCambios('${alquiler.id}')">Guardar Cambios</button>
-                    <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
+                  <button class="editar" onclick="editarAlquiler('${alquiler.id}')">Editar</button>
+                  <div class="campo-edicion" id="campo-direccion-${alquiler.id}">
+                    <input type="text" class="input-edit" value="${alquiler.direccion}" id="direccion-${alquiler.id}" />
                   </div>
                 </div>
 
@@ -131,8 +121,15 @@
                     <input type="text" class="input-edit" value="${alquiler.whatsapp}" id="whatsapp-${alquiler.id}" />
                   </div>
                 </div>
-              </div>
-            `;
+
+                <button class="${alquiler.estado === 'Activo' ? 'activo' : 'inactivo'}" 
+                        onclick="cambiarEstadoAlquiler('${alquiler.id}', '${alquiler.estado}')">
+                  ${alquiler.estado === 'Activo' ? 'Desactivar' : 'Activar'}
+                </button>
+
+                <button onclick="guardarCambios('${alquiler.id}')">Guardar Cambios</button>
+                <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
+              </div>`;
           });
           alquileresListaDiv.innerHTML = alquileresHtml;
         }
@@ -148,7 +145,7 @@
       console.log(`Cambiando estado del alquiler con ID ${id} a ${nuevoEstado}`);
 
       // Cambiar el color del botón
-      const botonEstado = document.querySelector(`#alquiler-${id} button:nth-child(2)`);
+      const botonEstado = document.querySelector(`button[onclick="cambiarEstadoAlquiler('${id}', '${estado}')"]`);
       if (nuevoEstado === 'Activo') {
         botonEstado.classList.remove('inactivo');
         botonEstado.classList.add('activo');
@@ -159,7 +156,7 @@
         botonEstado.textContent = 'Activar';
       }
 
-      // Actualizamos la columna E en Google Sheets
+      // Aquí actualizamos la columna E en Google Sheets
       const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=cambiarEstado&idAlquiler=${id}&nuevoEstado=${nuevoEstado}`;
       try {
         const response = await fetch(apiUrl);
@@ -205,7 +202,10 @@
     function eliminarAlquiler(id) {
       if (confirm('¿Estás seguro de que deseas eliminar este alquiler?')) {
         console.log(`Eliminando alquiler con ID ${id}`);
-        // Aquí iría la lógica para eliminar el alquiler desde el backend
+
+        // Llama a la API para eliminar el alquiler
+        // Ejemplo:
+        // fetch('https://mi-backend.com/eliminar-alquiler', { ... })
       }
     }
   </script>
