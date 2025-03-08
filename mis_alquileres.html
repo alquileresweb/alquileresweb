@@ -51,9 +51,15 @@
       const alquileresListaDiv = document.getElementById('alquileres-lista');
       
       try {
-        const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario}`;
+        // Usar el nuevo proxy All Origins
+        const proxyUrl = 'https://api.allorigins.win/raw?url=';
+        const apiUrl = https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=obtenerMisAlquileres&idPropietario=${idPropietario};
+        
+        const fullUrl = proxyUrl + encodeURIComponent(apiUrl); // Concatenamos y codificamos la URL para evitar problemas con caracteres especiales
 
-        const response = await fetch(apiUrl, {
+        console.log(Solicitando datos desde: ${fullUrl}); // Log de la URL solicitada
+
+        const response = await fetch(fullUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -71,10 +77,10 @@
         } else {
           let alquileresHtml = '';
           data.forEach(alquiler => {
-            alquileresHtml += `
+            alquileresHtml += 
               <div class="alquiler-container" id="alquiler-${alquiler.id}">
-                <h3>Alquiler en: ${alquiler.direccion} (ID: ${alquiler.idAlquiler})</h3> <!-- Muestra el ID aquí -->
-                
+                <h3>Alquiler en: ${alquiler.direccion}</h3>
+
                 <div>
                   <span>Dirección:</span>
                   <span>${alquiler.direccion}</span>
@@ -121,33 +127,66 @@
                   ${alquiler.estado === 'Activo' ? 'Desactivar' : 'Activar'}
                 </button>
 
-                <button onclick="guardarCambios('${alquiler.id}', '${alquiler.idAlquiler}')">Guardar Cambios</button> <!-- Enviar el idAlquiler -->
+                <button onclick="guardarCambios('${alquiler.id}')">Guardar Cambios</button>
                 <button onclick="eliminarAlquiler('${alquiler.id}')">Eliminar</button>
-              </div>`;
+              </div>;
           });
           alquileresListaDiv.innerHTML = alquileresHtml;
         }
       } catch (error) {
         console.error('Error al obtener los alquileres:', error);
-        alquileresListaDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+        alquileresListaDiv.innerHTML = <p>Error: ${error.message}</p>;
       }
     }
 
-    // Función para guardar los cambios realizados en un alquiler
-    async function guardarCambios(id, idAlquiler) {
-      const nuevaDireccion = document.getElementById(`direccion-${id}`).value;
-      const nuevosAmbientes = document.getElementById(`ambientes-${id}`).value;
-      const nuevoPrecio = document.getElementById(`precio-${id}`).value;
-      const nuevoMascotas = document.getElementById(`mascotas-${id}`).value;
-      const nuevoWhatsapp = document.getElementById(`whatsapp-${id}`).value;
+    // Función para activar o desactivar un alquiler
+    async function cambiarEstadoAlquiler(id, estado) {
+      const nuevoEstado = estado === 'Activo' ? 'Inactivo' : 'Activo';
+      console.log(Cambiando estado del alquiler con ID ${id} a ${nuevoEstado});
 
-      console.log(`Guardando cambios para el alquiler con ID ${id}`);
-      console.log(`ID Alquiler: ${idAlquiler}`);
-      console.log(`Dirección: ${nuevaDireccion}, Ambientes: ${nuevosAmbientes}, Precio: ${nuevoPrecio}, Mascotas: ${nuevoMascotas}, WhatsApp: ${nuevoWhatsapp}`);
+      // Cambiar el color del botón
+      const botonEstado = document.querySelector(button[onclick="cambiarEstadoAlquiler('${id}', '${estado}')"]);
+      if (nuevoEstado === 'Activo') {
+        botonEstado.classList.remove('inactivo');
+        botonEstado.classList.add('activo');
+        botonEstado.textContent = 'Desactivar';
+      } else {
+        botonEstado.classList.remove('activo');
+        botonEstado.classList.add('inactivo');
+        botonEstado.textContent = 'Activar';
+      }
+
+      // Aquí actualizamos la columna E en Google Sheets
+      const apiUrl = https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=cambiarEstado&idAlquiler=${id}&nuevoEstado=${nuevoEstado};
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error('Error al cambiar el estado');
+        }
+      } catch (error) {
+        console.error('Error al cambiar el estado en Google Sheets:', error);
+      }
+    }
+
+    // Función para editar un alquiler
+    function editarAlquiler(id) {
+      const camposEdicion = document.querySelectorAll(#campo-direccion-${id}, #campo-ambientes-${id}, #campo-precio-${id}, #campo-mascotas-${id}, #campo-whatsapp-${id});
+      camposEdicion.forEach(campo => campo.style.display = 'inline-block');
+    }
+
+    // Función para guardar los cambios realizados en un alquiler
+    async function guardarCambios(id) {
+      const nuevaDireccion = document.getElementById(direccion-${id}).value;
+      const nuevosAmbientes = document.getElementById(ambientes-${id}).value;
+      const nuevoPrecio = document.getElementById(precio-${id}).value;
+      const nuevoMascotas = document.getElementById(mascotas-${id}).value;
+      const nuevoWhatsapp = document.getElementById(whatsapp-${id}).value;
+
+      console.log(Guardando cambios para el alquiler con ID ${id});
+      console.log(Dirección: ${nuevaDireccion}, Ambientes: ${nuevosAmbientes}, Precio: ${nuevoPrecio}, Mascotas: ${nuevoMascotas}, WhatsApp: ${nuevoWhatsapp});
 
       // Actualizamos la hoja de Google Sheets con los nuevos datos
-      const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=editarAlquiler&idAlquiler=${idAlquiler}&direccion=${nuevaDireccion}&ambientes=${nuevosAmbientes}&precio=${nuevoPrecio}&mascotas=${nuevoMascotas}&whatsapp=${nuevoWhatsapp}`;
-      
+      const apiUrl = https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=editarAlquiler&idAlquiler=${id}&direccion=${nuevaDireccion}&ambientes=${nuevosAmbientes}&precio=${nuevoPrecio}&mascotas=${nuevoMascotas}&whatsapp=${nuevoWhatsapp};
       try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
@@ -162,15 +201,16 @@
     // Función para eliminar un alquiler
     async function eliminarAlquiler(id) {
       if (confirm('¿Estás seguro de que deseas eliminar este alquiler?')) {
-        console.log(`Eliminando alquiler con ID ${id}`);
+        console.log(Eliminando alquiler con ID ${id});
 
-        const apiUrl = `https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=eliminarAlquiler&idAlquiler=${id}`;
+        // Llama a la API para eliminar el alquiler
+        const apiUrl = https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=eliminarAlquiler&idAlquiler=${id};
         try {
           const response = await fetch(apiUrl);
           if (!response.ok) {
             throw new Error('Error al eliminar el alquiler');
           }
-          document.getElementById(`alquiler-${id}`).remove();
+          document.getElementById(alquiler-${id}).remove();
           alert('Alquiler eliminado exitosamente');
         } catch (error) {
           console.error('Error al eliminar el alquiler:', error);
