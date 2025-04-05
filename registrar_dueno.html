@@ -69,33 +69,28 @@
     document.getElementById('formRegistro').addEventListener('submit', function(event) {
       event.preventDefault();
 
-      const nombre = document.getElementById('nombre').value;
-      const email = document.getElementById('email').value;
-      const telefono = document.getElementById('telefono').value;
+      const nombre = document.getElementById('nombre').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
 
-      const formData = new URLSearchParams();
-      formData.append('action', 'registrarDueno');
-      formData.append('nombre', nombre);
-      formData.append('email', email);
-      formData.append('telefono', telefono);
+      const url = 'https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec' +
+        '?action=registrarDueno' +
+        '&nombre=' + encodeURIComponent(nombre) +
+        '&email=' + encodeURIComponent(email) +
+        '&telefono=' + encodeURIComponent(telefono);
 
-      fetch('https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec', {
-        method: 'POST',
-        body: formData
+      fetch(url, {
+        method: 'GET',
+        mode: 'no-cors'
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data && data.id) {
-          document.getElementById('mensaje').innerText = '✅ Dueño registrado. ID: ' + data.id;
-          document.getElementById('mensaje').style.color = 'green';
-          document.getElementById('formRegistro').reset();
-        } else {
-          throw new Error('Respuesta inválida');
-        }
+      .then(() => {
+        document.getElementById('mensaje').innerText = '✅ Dueño registrado con éxito.';
+        document.getElementById('mensaje').style.color = 'green';
+        document.getElementById('formRegistro').reset();
       })
       .catch(error => {
         console.error('Error:', error);
-        document.getElementById('mensaje').innerText = '❌ Hubo un error al registrar.';
+        document.getElementById('mensaje').innerText = '❌ Hubo un error en la solicitud.';
         document.getElementById('mensaje').style.color = 'red';
       });
     });
