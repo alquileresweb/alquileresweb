@@ -30,15 +30,19 @@
             const email = document.getElementById('email').value;
             const telefono = document.getElementById('telefono').value;
 
-            // Crear la URL con los parámetros
-            const url = 'https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec?action=registrarDueno&nombre=' + encodeURIComponent(nombre) + '&email=' + encodeURIComponent(email) + '&telefono=' + encodeURIComponent(telefono);
+            const formData = new FormData();
+            formData.append('action', 'registrarDueno');
+            formData.append('nombre', nombre);
+            formData.append('email', email);
+            formData.append('telefono', telefono);
 
-            // Realizar la solicitud POST
-            fetch(url, {
+            fetch('https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec', {
                 method: 'POST',
-                mode: 'no-cors'
+                body: formData,
             })
-            .then(() => {
+            .then(response => response.text())
+            .then(data => {
+                console.log('Respuesta del servidor:', data);
                 document.getElementById('mensaje').innerText = 'Dueño registrado con éxito.';
             })
             .catch(error => {
