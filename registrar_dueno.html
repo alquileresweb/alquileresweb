@@ -30,7 +30,6 @@
             const email = document.getElementById('email').value;
             const telefono = document.getElementById('telefono').value;
 
-            // Enviar los datos por la URL como parámetros (porque no-cors ignora body del POST)
             const url = 'https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec' +
                 '?action=registrarDueno' +
                 '&nombre=' + encodeURIComponent(nombre) +
@@ -38,12 +37,12 @@
                 '&telefono=' + encodeURIComponent(telefono);
 
             fetch(url, {
-                method: 'POST',
+                method: 'GET',
                 mode: 'no-cors'
             })
             .then(() => {
-                // Aunque la respuesta sea opaca, si llegamos aquí asumimos que fue exitosa
                 document.getElementById('mensaje').innerText = 'Dueño registrado con éxito.';
+                document.getElementById('formRegistro').reset();
             })
             .catch(error => {
                 console.error('Error:', error);
