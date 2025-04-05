@@ -1,83 +1,99 @@
-function handleRequest(e) {
-  const action = e.parameter.action;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registrar Dueño</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      max-width: 500px;
+      margin: auto;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.7rem;
+      font-size: 1rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #mensaje {
+      margin-top: 1rem;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
 
-  // CORS HEADERS
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
-  };
+  <h2>Registrar Dueño</h2>
 
-  // Manejo OPTIONS (preflight)
-  if (e.postData === undefined && e.parameter.action === undefined) {
-    return ContentService.createTextOutput('ok').setMimeType(ContentService.MimeType.TEXT);
-  }
+  <form id="formRegistro">
+    <input type="text" name="nombre" placeholder="Nombre" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="text" name="telefono" placeholder="Teléfono" required />
+    <button type="submit">Registrar</button>
+  </form>
 
-  // FUNCIONES
-  let respuesta = "";
+  <p id="mensaje"></p>
 
-  if (action == "registrarDueno") {
-    const nombre = e.parameter.nombre;
-    const email = e.parameter.email;
-    const telefono = e.parameter.telefono;
-    respuesta = registrarDueno(nombre, email, telefono);
-  }
+  <script>
+    const form = document.getElementById("formRegistro");
+    const mensaje = document.getElementById("mensaje");
 
-  else if (action == "verificarLogin") {
-    const idUnico = e.parameter.idUnico;
-    respuesta = verificarInicioSesion(idUnico);
-  }
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-  else if (action == "agregarAlquiler") {
-    const direccion = e.parameter.direccion;
-    const ambientes = e.parameter.ambientes;
-    const precio = e.parameter.precio;
-    const mascotas = e.parameter.mascotas;
-    const estado = e.parameter.estado;
-    const idPropietario = e.parameter.idPropietario;
-    const whatsApp = e.parameter.whatsApp;
-    const latitud = e.parameter.latitud;
-    const longitud = e.parameter.longitud;
+      const formData = new FormData(form);
+      const data = new URLSearchParams();
+      data.append("action", "registrarDueno");
+      for (const pair of formData) {
+        data.append(pair[0], pair[1]);
+      }
 
-    agregarAlquiler(direccion, ambientes, precio, mascotas, estado, idPropietario, whatsApp, latitud, longitud);
-    respuesta = JSON.stringify({ resultado: "ok" });
-  }
+      try {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: data.toString()
+        });
 
-  else if (action == "obtenerMisAlquileres") {
-    const idPropietario = e.parameter.idPropietario;
-    const alquileres = obtenerMisAlquileres(idPropietario);
-    respuesta = JSON.stringify(alquileres);
-  }
+        if (!response.ok) {
+          throw new Error("Error en la respuesta del servidor");
+        }
 
-  else if (action == "eliminarAlquiler") {
-    const idAlquiler = e.parameter.idAlquiler;
-    eliminarAlquiler(idAlquiler);
-    respuesta = JSON.stringify({ eliminado: true });
-  }
+        const result = await response.json();
+        mensaje.textContent = `✅ Registrado con ID: ${result.id}`;
+        mensaje.style.color = "green";
+        form.reset();
+      } catch (error) {
+        mensaje.textContent = `❌ Error al registrar: ${error.message}`;
+        mensaje.style.color = "red";
+        console.error("Error:", error);
+      }
+    });
+  </script>
 
-  else if (action == "editarAlquiler") {
-    const idAlquiler = e.parameter.idAlquiler;
-    const direccion = e.parameter.direccion;
-    const ambientes = e.parameter.ambientes;
-    const precio = e.parameter.precio;
-    const mascotas = e.parameter.mascotas;
-    const estado = e.parameter.estado;
-    const whatsApp = e.parameter.whatsApp;
-    const latitud = e.parameter.latitud;
-    const longitud = e.parameter.longitud;
-
-    editarAlquiler(idAlquiler, direccion, ambientes, precio, mascotas, estado, whatsApp, latitud, longitud);
-    respuesta = JSON.stringify({ editado: true });
-  }
-
-  else {
-    respuesta = JSON.stringify({ error: "Acción no válida" });
-  }
-
-  // DEVOLVER RESPUESTA CON HEADERS
-  return HtmlService.createHtmlOutput(respuesta)
-    .setMimeType(ContentService.MimeType.JSON)
-    .appendUntrustedContent("")
-    .getResponse()
-    .setHeaders(corsHeaders);
-}
+</body>
+</html>
