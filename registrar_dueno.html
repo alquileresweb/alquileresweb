@@ -1,54 +1,61 @@
+<!-- registrar_dueno.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Dueño</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrar Dueño</title>
 </head>
 <body>
-    <h1>Registrar Dueño</h1>
-    <form id="formRegistro">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" required>
-        
-        <label for="email">Email:</label>
-        <input type="email" id="email" required>
+  <h1>Registrar Dueño</h1>
+  <form id="formRegistro">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" required />
 
-        <label for="telefono">Teléfono:</label>
-        <input type="tel" id="telefono" required>
+    <label for="email">Email:</label>
+    <input type="email" id="email" required />
 
-        <button type="submit">Registrar</button>
-    </form>
+    <label for="telefono">Teléfono:</label>
+    <input type="tel" id="telefono" required />
 
-    <p id="mensaje"></p>
+    <button type="submit">Registrar</button>
+  </form>
 
-    <script>
-        document.getElementById('formRegistro').addEventListener('submit', function(event) {
-            event.preventDefault();
+  <p id="mensaje"></p>
 
-            const nombre = document.getElementById('nombre').value;
-            const email = document.getElementById('email').value;
-            const telefono = document.getElementById('telefono').value;
+  <script>
+    const endpoint = 'https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec';
 
-            const url = 'https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec' +
-                '?action=registrarDueno' +
-                '&nombre=' + encodeURIComponent(nombre) +
-                '&email=' + encodeURIComponent(email) +
-                '&telefono=' + encodeURIComponent(telefono);
+    document.getElementById('formRegistro').addEventListener('submit', function (event) {
+      event.preventDefault();
 
-            fetch(url, {
-                method: 'GET',
-                mode: 'no-cors'
-            })
-            .then(() => {
-                document.getElementById('mensaje').innerText = 'Dueño registrado con éxito.';
-                document.getElementById('formRegistro').reset();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('mensaje').innerText = 'Hubo un error en la solicitud.';
-            });
+      const nombre = document.getElementById('nombre').value;
+      const email = document.getElementById('email').value;
+      const telefono = document.getElementById('telefono').value;
+
+      const formData = new URLSearchParams();
+      formData.append('action', 'registrarDueno');
+      formData.append('nombre', nombre);
+      formData.append('email', email);
+      formData.append('telefono', telefono);
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData.toString()
+      })
+        .then(response => response.text())
+        .then(data => {
+          console.log("Respuesta del servidor:", data);
+          document.getElementById('mensaje').innerText = 'Dueño registrado con éxito.';
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('mensaje').innerText = 'Hubo un error al registrar.';
         });
-    </script>
+    });
+  </script>
 </body>
 </html>
