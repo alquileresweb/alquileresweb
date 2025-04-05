@@ -66,7 +66,7 @@
       const formData = new FormData(form);
       const data = new URLSearchParams();
       data.append("action", "registrarDueno");
-      for (const pair of formData) {
+      for (const pair of formData.entries()) {
         data.append(pair[0], pair[1]);
       }
 
@@ -84,9 +84,13 @@
         }
 
         const result = await response.json();
-        mensaje.textContent = `✅ Registrado con ID: ${result.id}`;
-        mensaje.style.color = "green";
-        form.reset();
+        if (result.id) {
+          mensaje.textContent = `✅ Registrado con ID: ${result.id}`;
+          mensaje.style.color = "green";
+          form.reset();
+        } else {
+          throw new Error(result.error || "Respuesta inesperada");
+        }
       } catch (error) {
         mensaje.textContent = `❌ Error al registrar: ${error.message}`;
         mensaje.style.color = "red";
