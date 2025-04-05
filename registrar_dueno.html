@@ -66,36 +66,33 @@
   <p id="mensaje"></p>
 
   <script>
-    document.getElementById('formRegistro').addEventListener('submit', async function(event) {
+    document.getElementById('formRegistro').addEventListener('submit', function(event) {
       event.preventDefault();
 
       const nombre = document.getElementById('nombre').value.trim();
       const email = document.getElementById('email').value.trim();
       const telefono = document.getElementById('telefono').value.trim();
 
-      const formData = new FormData();
-      formData.append("action", "registrarDueno");
-      formData.append("nombre", nombre);
-      formData.append("email", email);
-      formData.append("telefono", telefono);
+      const url = 'https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec' +
+        '?action=registrarDueno' +
+        '&nombre=' + encodeURIComponent(nombre) +
+        '&email=' + encodeURIComponent(email) +
+        '&telefono=' + encodeURIComponent(telefono);
 
-      try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec", {
-          method: "POST",
-          body: formData
-        });
-
-        const resultado = await response.json();
-        console.log(resultado);
-
-        document.getElementById('mensaje').innerText = '✅ ' + resultado.mensaje;
+      fetch(url, {
+        method: 'GET',
+        mode: 'no-cors'
+      })
+      .then(() => {
+        document.getElementById('mensaje').innerText = '✅ Dueño registrado con éxito.';
         document.getElementById('mensaje').style.color = 'green';
         document.getElementById('formRegistro').reset();
-      } catch (error) {
-        console.error("Error:", error);
-        document.getElementById('mensaje').innerText = '❌ Error al registrar dueño.';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('mensaje').innerText = '❌ Hubo un error en la solicitud.';
         document.getElementById('mensaje').style.color = 'red';
-      }
+      });
     });
   </script>
 </body>
