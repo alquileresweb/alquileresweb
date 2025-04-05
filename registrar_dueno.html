@@ -73,20 +73,25 @@
       const email = document.getElementById('email').value.trim();
       const telefono = document.getElementById('telefono').value.trim();
 
-      const url = 'https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec' +
-        '?action=registrarDueno' +
-        '&nombre=' + encodeURIComponent(nombre) +
-        '&email=' + encodeURIComponent(email) +
-        '&telefono=' + encodeURIComponent(telefono);
+      const formData = new FormData();
+      formData.append('action', 'registrarDueno');
+      formData.append('nombre', nombre);
+      formData.append('email', email);
+      formData.append('telefono', telefono);
 
-      fetch(url, {
-        method: 'GET',
-        mode: 'no-cors'
+      fetch('https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec', {
+        method: 'POST',
+        body: formData,
       })
-      .then(() => {
-        document.getElementById('mensaje').innerText = '✅ Dueño registrado con éxito.';
-        document.getElementById('mensaje').style.color = 'green';
-        document.getElementById('formRegistro').reset();
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.id) {
+          document.getElementById('mensaje').innerText = '✅ Dueño registrado con éxito. ID: ' + data.id;
+          document.getElementById('mensaje').style.color = 'green';
+          document.getElementById('formRegistro').reset();
+        } else {
+          throw new Error('Respuesta inválida');
+        }
       })
       .catch(error => {
         console.error('Error:', error);
