@@ -52,46 +52,46 @@
   <h1>Registrar Dueño</h1>
   <form id="formRegistro" autocomplete="on">
     <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" autocomplete="name" required />
+    <input type="text" id="nombre" autocomplete="name" required>
 
     <label for="email">Email:</label>
-    <input type="email" id="email" autocomplete="email" required />
+    <input type="email" id="email" autocomplete="email" required>
 
     <label for="telefono">Teléfono:</label>
-    <input type="tel" id="telefono" autocomplete="tel" required />
+    <input type="tel" id="telefono" autocomplete="tel" required>
 
     <button type="submit">Registrar</button>
   </form>
 
-  <p id="mensaje"> </p>
+  <p id="mensaje"></p>
 
   <script>
-    document.getElementById('formRegistro').addEventListener('submit', async function(event) {
+    document.getElementById('formRegistro').addEventListener('submit', function(event) {
       event.preventDefault();
 
       const nombre = document.getElementById('nombre').value.trim();
       const email = document.getElementById('email').value.trim();
       const telefono = document.getElementById('telefono').value.trim();
 
+      const url = 'https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec';
       const formData = new FormData();
       formData.append("action", "registrarDueno");
       formData.append("nombre", nombre);
       formData.append("email", email);
       formData.append("telefono", telefono);
 
-      // Envío de datos sin esperar respuesta (no-cors)
-      fetch("https://script.google.com/macros/s/AKfycbw2eZAfb1HKBbhRG_1lFqh6cbRbHLLrA0x4mm6SEqV3WIOqC6ACnKA8-YfsTc7n-8GwlA/exec", {
-        method: "POST",
-        body: formData,
-        mode: "no-cors" // <-- IMPORTANTE
+      fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
       }).then(() => {
-        document.getElementById("mensaje").innerText = "✅ Dueño registrado correctamente.";
-        document.getElementById("mensaje").style.color = "green";
-        document.getElementById("formRegistro").reset();
-      }).catch(error => {
-        console.error("Error:", error);
-        document.getElementById("mensaje").innerText = "❌ Hubo un error al registrar.";
-        document.getElementById("mensaje").style.color = "red";
+        document.getElementById('mensaje').innerText = '✅ Dueño registrado con éxito.';
+        document.getElementById('mensaje').style.color = 'green';
+        document.getElementById('formRegistro').reset();
+      }).catch((error) => {
+        console.error('Error:', error);
+        document.getElementById('mensaje').innerText = '❌ Hubo un error en la solicitud.';
+        document.getElementById('mensaje').style.color = 'red';
       });
     });
   </script>
